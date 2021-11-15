@@ -17,5 +17,3 @@ def parser_data(city,transport,number_transport,station):
         will_be = soup2.find('span', {"class": "future"})
         all_time = [' '.join(was.text.split()), ' '.join(now.text.split()), ' '.join(will_be.text.split())]
     return all_time
-
-parser_data('minsk','autobus','24','Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
