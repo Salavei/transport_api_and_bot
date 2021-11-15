@@ -37,5 +37,16 @@ async def get_message(message: types.Message):
     print(send_message.to_python())
 
 
+
+
+@dp.message_handler()
+async def echo_message(msg: types.Message):
+    up_msg = msg.text
+    msg = up_msg.split()
+    print(msg)
+    # await bot.send_message(msg.from_user.id, msg.text)
+    # принимать значение о транспорте и т/д
+
+
 if __name__ == '__main__':
     executor.start_polling(dp)
