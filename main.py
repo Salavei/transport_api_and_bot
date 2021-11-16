@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
 from parser import parser_time_wait
 
-token = ' '
+token = '2103715376:AAFeYeMDV_73TrtT3gAPID_rcGp0LsXau80'
 
 bot = Bot(token)
 dp = Dispatcher(bot)
