@@ -23,7 +23,7 @@ async def get_message(message: types.Message):
 async def get_message(message: types.Message):
     trans_data = parser_time_wait('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
     chat_id = message.chat.id
-    text = f'От дома --- прошлый был в {trans_data[0]}, следующий в {trans_data[1]},  {trans_data[2]}'
+    text = f'От дома --- прошлый был в {trans_data[0]}, следующий в {trans_data[1]}'
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
 
@@ -37,11 +37,11 @@ async def get_message(message: types.Message):
     print(send_message.to_python())
 
 
-@dp.message_handler()
-async def echo_message(msg: types.Message):
-    up_msg = msg.text
-    msg = up_msg.split()
-    print(msg)
+# @dp.message_handler()
+# async def echo_message(msg: types.Message):
+#     up_msg = msg.text
+#     msg = up_msg.split()
+#     print(msg)
     # await bot.send_message(msg.from_user.id, msg.text)
     # принимать значение о транспорте и т/д
 
