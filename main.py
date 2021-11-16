@@ -15,6 +15,7 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
+
 @dp.message_handler(commands=['start'])
 async def get_message(message: types.Message):
     chat_id = message.chat.id
@@ -24,6 +25,11 @@ async def get_message(message: types.Message):
     транспорт: autobus, trolleybus, tram, metro"""
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
+async def on_startup(dp):
+    logging.warning(
+        'Starting connection. ')
+    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
+
 
 
 @dp.message_handler(commands=['home'])
@@ -33,6 +39,11 @@ async def get_message(message: types.Message):
     text = f'От дома --- прошлый был в {trans_data[0]}, следующий в {trans_data[1]}'
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
+async def on_startup(dp):
+    logging.warning(
+        'Starting connection. ')
+    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
+
 
 
 @dp.message_handler(commands=['work'])
@@ -43,7 +54,10 @@ async def get_message(message: types.Message):
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
 
-
+async def on_startup(dp):
+    logging.warning(
+        'Starting connection. ')
+    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
 # @dp.message_handler()
 # async def echo_message(msg: types.Message):
 #     up_msg = msg.text
