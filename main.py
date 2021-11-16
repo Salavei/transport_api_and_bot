@@ -1,19 +1,11 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
 from parser import parser_time_wait
-import logging
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from aiogram.utils.executor import start_webhook
-from settings import (BOT_TOKEN, HEROKU_APP_NAME,
-                          WEBHOOK_URL, WEBHOOK_PATH,
-                          WEBAPP_HOST, WEBAPP_PORT)
 
-# token = '2103715376:AAFeYeMDV_73TrtT3gAPID_rcGp0LsXau80'
+token = '2103715376:AAFeYeMDV_73TrtT3gAPID_rcGp0LsXau80'
 
-
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token)
 dp = Dispatcher(bot)
-dp.middleware.setup(LoggingMiddleware())
 
 
 @dp.message_handler(commands=['start'])
@@ -25,11 +17,6 @@ async def get_message(message: types.Message):
     транспорт: autobus, trolleybus, tram, metro"""
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
-async def on_startup(dp):
-    logging.warning(
-        'Starting connection. ')
-    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
-
 
 
 @dp.message_handler(commands=['home'])
@@ -39,11 +26,6 @@ async def get_message(message: types.Message):
     text = f'От дома --- прошлый был в {trans_data[0]}, следующий в {trans_data[1]}'
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
-async def on_startup(dp):
-    logging.warning(
-        'Starting connection. ')
-    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
-
 
 
 @dp.message_handler(commands=['work'])
@@ -54,10 +36,7 @@ async def get_message(message: types.Message):
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
 
-async def on_startup(dp):
-    logging.warning(
-        'Starting connection. ')
-    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
+
 # @dp.message_handler()
 # async def echo_message(msg: types.Message):
 #     up_msg = msg.text
@@ -67,12 +46,5 @@ async def on_startup(dp):
     # принимать значение о транспорте и т/д
 
 
-def main():
-    start_webhook(
-        dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
-        skip_updates=True,
-        on_startup=on_startup,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
-    )
+if __name__ == '__main__':
+    executor.start_polling(dp)
