@@ -43,16 +43,17 @@ def parser_station(city, transport, number_transport):
 # parser_station('minsk','autobus','69')
 
 
-# def parser_all_station(city, transport, number_transport):
-#     url = f'https://kogda.by/routes/{city}/{transport}/{number_transport}'
-#     r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-#     html = r.text
-#     soup = BeautifulSoup(html, 'lxml')
-#     quote_boxes = soup.find('ul', {"class": "list-group"}).text
-#     quote_boxes1 = soup.find('div', {"id": "direction-1"}).text
-#
-#     return print(','.join(quote_boxes.split()),','.join(quote_boxes1.split()), sep='\n \n')
-#
+def parser_all_station(city, transport, number_transport):
+    url = f'https://kogda.by/routes/{city}/{transport}/{number_transport}'
+    r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    html = r.text
+    soup = BeautifulSoup(html, 'lxml')
+    quote_boxes = soup.find('ul', {"class": "list-group"}).text
+    quote_boxes1 = soup.find('div', {"id": "direction-1"}).text
+    alls = [','.join(quote_boxes.split()),','.join(quote_boxes1.split())]
+    # print(','.join(quote_boxes.split()), ','.join(quote_boxes1.split()), sep='\n \n')
+    return alls
+
 # parser_all_station('minsk','autobus','69')
 
 

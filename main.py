@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
-from parser import parser_time_wait
+from parser import parser_time_wait, parser_station, parser_all_station
 
 token = '2103715376:AAFeYeMDV_73TrtT3gAPID_rcGp0LsXau80'
 
@@ -36,6 +36,22 @@ async def get_message(message: types.Message):
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
 
+
+@dp.message_handler(commands=['station'])
+async def parser_station(message: types.Message):
+    trans_data = parser_station('minsk', 'autobus', '24')
+    chat_id = message.chat.id
+    text = f'Направления 24 автобуса \n {trans_data}'
+    send_message = await bot.send_message(chat_id=chat_id, text=text)
+    print(send_message.to_python())
+
+@dp.message_handler(commands=['allstation'])
+async def parser_station(message: types.Message):
+    trans_data = parser_all_station('minsk', 'autobus', '24')
+    chat_id = message.chat.id
+    text = f'Все остановки 24 автобуса \n {trans_data}'
+    send_message = await bot.send_message(chat_id=chat_id, text=text)
+    print(send_message.to_python())
 
 # @dp.message_handler()
 # async def echo_message(msg: types.Message):
