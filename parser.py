@@ -8,15 +8,18 @@ def parser_time_wait(city, transport, number_transport, station):
     html = r.text
     soup = BeautifulSoup(html, 'lxml')
     quote_boxes = soup.find_all('div', {"class": "content-block-desktop"})
-
+    quote_boxes1 = soup.find_all('span', {"class": "future"})
     for q in quote_boxes:
         soup2 = BeautifulSoup(str(q), 'lxml')
 
         was = soup2.find('span', {"class": "passed"})
         now = soup2.find('span', {"class": "future"})
-        will_be = soup2.find('span', {"class": "future"})
+
+    for q in quote_boxes1:
+        soup2 = BeautifulSoup(str(q), 'lxml')
+        will_be = soup2.find('span')
         all_time = [' '.join(was.text.split()), ' '.join(now.text.split()), ' '.join(will_be.text.split())]
-        #добавить поиск 3-тьего столбика
+
     return all_time
 parser_time_wait('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
 
@@ -36,9 +39,7 @@ def parser_station(city, transport, number_transport):
     for q in quote_boxes1:
         soup2 = BeautifulSoup(str(q), 'lxml')
         right = soup2.find('a').contents[0]
-        # print(' '.join(left.text.split()), ' '.join(right.text.split()), sep='\n')
-        wwww =[' '.join(left.text.split()),' '.join(right.text.split())]
-    return wwww
+    return f"{' '.join(left.text.split())} \n {' '.join(right.text.split())}"
 
 # parser_station('minsk','autobus','69')
 
@@ -50,10 +51,7 @@ def parser_all_station(city, transport, number_transport):
     soup = BeautifulSoup(html, 'lxml')
     quote_boxes = soup.find('ul', {"class": "list-group"}).text
     quote_boxes1 = soup.find('div', {"id": "direction-1"}).text
-    alls = [','.join(quote_boxes.split()),','.join(quote_boxes1.split())]
-    # print(','.join(quote_boxes.split()), ','.join(quote_boxes1.split()), sep='\n \n')
-    return alls
-
+    return f"{' '.join(quote_boxes.split())} \n \n{' '.join(quote_boxes1.split())}"
 # parser_all_station('minsk','autobus','69')
 
 
