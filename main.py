@@ -1,8 +1,8 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
-from parser import parser_data
+from parser import parser_time_wait
 
-token = '2103715376:AAFeYeMDV_73TrtT3gAPID_rcGp0LsXau80'
+token = ' '
 
 bot = Bot(token)
 dp = Dispatcher(bot)
@@ -21,22 +21,20 @@ async def get_message(message: types.Message):
 
 @dp.message_handler(commands=['home'])
 async def get_message(message: types.Message):
-    trans_data = parser_data('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
+    trans_data = parser_time_wait('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
     chat_id = message.chat.id
-    text = f'От дома --- прошлый был в {trans_data[0]}, следующий в {trans_data[1]}'
+    text = f'От дома --- прошлый был в {trans_data[0]}, следующий в {trans_data[1]},  {trans_data[2]}'
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
 
 
 @dp.message_handler(commands=['work'])
 async def get_message(message: types.Message):
-    trans_data = parser_data('minsk', 'autobus', '24', 'ДС%20Зелёный%20Луг-6%20-%20Воронянского/Романовская%20Слобода')
+    trans_data = parser_time_wait('minsk', 'autobus', '24', 'ДС%20Зелёный%20Луг-6%20-%20Воронянского/Романовская%20Слобода')
     chat_id = message.chat.id
     text = f'От работы --- прошлый был в {trans_data[0]}, следующий в {trans_data[1]}'
     send_message = await bot.send_message(chat_id=chat_id, text=text)
     print(send_message.to_python())
-
-
 
 
 @dp.message_handler()
