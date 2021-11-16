@@ -1,12 +1,19 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
 from parser import parser_time_wait
+import logging
+from aiogram.contrib.middlewares.logging import LoggingMiddleware
+from aiogram.utils.executor import start_webhook
+from settings import (BOT_TOKEN, HEROKU_APP_NAME,
+                          WEBHOOK_URL, WEBHOOK_PATH,
+                          WEBAPP_HOST, WEBAPP_PORT)
 
-token = '2103715376:AAFeYeMDV_73TrtT3gAPID_rcGp0LsXau80'
+# token = '2103715376:AAFeYeMDV_73TrtT3gAPID_rcGp0LsXau80'
 
-bot = Bot(token)
+
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
-
+dp.middleware.setup(LoggingMiddleware())
 
 @dp.message_handler(commands=['start'])
 async def get_message(message: types.Message):
@@ -46,5 +53,12 @@ async def get_message(message: types.Message):
     # принимать значение о транспорте и т/д
 
 
-if __name__ == '__main__':
-    executor.start_polling(dp)
+def main():
+    start_webhook(
+        dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        skip_updates=True,
+        on_startup=on_startup,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
+    )
