@@ -6,8 +6,13 @@ from telegram import Update
 from telegram.ext import CallbackContext
 from telegram.ext import Filters
 from telegram.ext import MessageHandler
+from telegram.ext import CommandHandler
 from telegram.ext import Updater
 from telegram.utils.request import Request
+
+from ugc.models import Message
+from ugc.models import Profile
+from .parser import parser_time_wait
 
 def log_errors(f):
     def inner(*args, **kwargs):
@@ -17,13 +22,80 @@ def log_errors(f):
             error_message = f'Произошла ошибка: {e}'
             print(error_message)
             raise e
+
     return inner
+
+
+@log_errors
+def do_count(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    count = Message.objects.filter(profile=p).count()
+
+    update.message.reply_text(
+        text=f'У вас {count} сообщений',
+    )
+
+@log_errors
+def do_work(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    test = parser_time_wait('minsk', 'autobus', '24', 'ДС%20Зелёный%20Луг-6%20-%20Воронянского/Романовская%20Слобода')
+
+    update.message.reply_text(
+        text=f'От работы --- автобус в {test[0]}, а еще один в {test[1]}',
+    )
+
+@log_errors
+def do_home(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    test = parser_time_wait('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
+
+    update.message.reply_text(
+        text=f'От дома --- автобус в {test[0]}, а еще один в {test[1]}',
+    )
 
 @log_errors
 def do_echo(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
     text = update.message.text
+    # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    Message(
+        profile=p,
+        text=text,
+    ).save()
+
     reply_text = 'Ваш ID ={}\n\n{}'.format(chat_id, text)
+    update.message.reply_text(
+        text=reply_text,
+    )
+
+
 class Command(BaseCommand):
     help = 'Телеграм-Бот'
 
@@ -43,11 +115,21 @@ class Command(BaseCommand):
             bot=bot,
             use_context=True,
         )
+        message_handler = CommandHandler('count', do_count)
+        updater.dispatcher.add_handler(message_handler)
 
-        message_handler = MessageHandler(Filters.text, do_echo)
-        updater.dispatcher.add_hundler(message_handler)
-        #3 -- обработчик
+        message_handler1 = CommandHandler('work', do_work)
+        updater.dispatcher.add_handler(message_handler1)
+
+        message_handler2 = CommandHandler('work', do_home)
+        updater.dispatcher.add_handler(message_handler2)
+
+        message_handler3 = MessageHandler(Filters.text, do_echo)
+        updater.dispatcher.add_handler(message_handler3)
+
+
+
+
+        # 3 -- обработчик
         updater.start_polling()
         updater.idle()
-
-
