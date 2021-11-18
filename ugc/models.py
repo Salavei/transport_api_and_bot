@@ -40,3 +40,45 @@ class Message(models.Model):
     class Meta:
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
+
+
+class SelectedTransport(models.Model):
+    profile = models.ForeignKey(
+        to='ugc.Profile',
+        verbose_name='Профиль',
+        on_delete=models.PROTECT,
+    )
+    transport = models.TextField(
+        verbose_name='Избранный транспорт'
+    )
+    created_at = models.DateTimeField(
+        verbose_name='Время сохранения',
+        auto_now_add=True,
+    )
+    def __str__(self):
+        return f'Сообщение {self.pk} от {self.profile}'
+
+    class Meta:
+        verbose_name = 'Транспорт'
+        verbose_name_plural = 'Транспорт'
+
+class SelectedStation(models.Model):
+    profile = models.ForeignKey(
+        to='ugc.Profile',
+        verbose_name='Профиль',
+        on_delete=models.PROTECT,
+    )
+    station = models.TextField(
+        verbose_name='Избранный маршрут'
+    )
+    created_at = models.DateTimeField(
+        verbose_name='Время сохранения',
+        auto_now_add=True,
+    )
+
+    def __str__(self):
+        return f'Сообщение {self.pk} от {self.profile}'
+
+    class Meta:
+        verbose_name = 'Маршрут'
+        verbose_name_plural = 'Маршруты'

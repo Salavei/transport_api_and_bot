@@ -12,7 +12,8 @@ from telegram.utils.request import Request
 
 from ugc.models import Message
 from ugc.models import Profile
-from .parser import parser_time_wait
+from ugc.models import SelectedTransport
+from .parser import parser_time_wait, parser_station, parser_all_station
 
 
 def log_errors(f):
@@ -79,10 +80,62 @@ def do_home(update: Update, context: CallbackContext):
 
 
 @log_errors
+def do_station(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    trans_data = parser_station('minsk', 'autobus', '24')
+
+    update.message.reply_text(
+        text=f'Направления автобуса \n {trans_data}',
+    )
+
+
+@log_errors
+def do_allstation(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    trans_data = parser_all_station('minsk', 'autobus', '24')
+
+    update.message.reply_text(
+        text=f'Все остановки автобуса \n {trans_data}',
+    )
+
+
+# @log_errors
+# def do_live(update: Update, context: CallbackContext):
+#     chat_id = update.message.chat_id
+#
+#     p, _ = Profile.objects.get_or_create(
+#         external_id=chat_id,
+#         defaults={
+#             'name': update.message.from_user.username,
+#         }
+#     )
+#     # trans_data = parser_all_station()
+#
+#     обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+#     print(count)
+#     update.message.reply_text(
+#         text=f'У вас {count} сообщений',
+#     )
+
+
+@log_errors
 def do_test(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
     text = update.message.text
-
     dd = text
     uu = [x for x in dd.split(' ')]
     print(uu)
@@ -93,47 +146,21 @@ def do_test(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    test = parser_time_wait(uu[0],uu[1],uu[2],uu[3])
+    test = parser_time_wait(uu[0], uu[1], uu[2], uu[3])
     update.message.reply_text(
         text=f'автобус с остановки {uu[3]}:\n в {test[0]} и {test[1]}'
     )
 
     Message(
         profile=p,
-        text=text,
+        ext=text,
     ).save()
 
 
 
 
-
-
-
-# @log_errors
-# def do_echo(update: Update, context: CallbackContext):
-#     chat_id = update.message.chat_id
-#     text = update.message.text
-#     # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
-#     p, _ = Profile.objects.get_or_create(
-#         external_id=chat_id,
-#         defaults={
-#             'name': update.message.from_user.username,
-#         }
-#     )
-#     Message(
-#         profile=p,
-#         text=text,
-#     ).save()
-#
-#     reply_text = 'Ваш ID ={}\n\n{}'.format(chat_id, text)
-#     update.message.reply_text(
-#         text=reply_text,
-#     )
-
-
 class Command(BaseCommand):
     help = 'Телеграм-Бот'
-
 
     def handle(self, *args, **options):
         request = Request(
@@ -160,9 +187,19 @@ class Command(BaseCommand):
         message_handler2 = CommandHandler('home', do_home)
         updater.dispatcher.add_handler(message_handler2)
 
-        message_handler = MessageHandler(Filters.text, do_test)
-        # message_handler = MessageHandler(Filters.all, do_test)
+        message_handler3 = CommandHandler('station', do_station)
+        updater.dispatcher.add_handler(message_handler3)
+
+        message_handler4 = CommandHandler('allstation', do_allstation)
+        updater.dispatcher.add_handler(message_handler4)
+
+        message_handler4 = CommandHandler('live', do_live)
+        updater.dispatcher.add_handler(message_handler4)
+
+        # message_handler = CommandHandler('test', do_test)
+        message_handler = MessageHandler(Filters.all, do_test)
         updater.dispatcher.add_handler(message_handler)
+
         #
         # message_handler = MessageHandler(Filters.text, do_echo)
         # updater.dispatcher.add_handler(message_handler)

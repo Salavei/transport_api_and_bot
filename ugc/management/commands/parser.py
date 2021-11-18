@@ -16,7 +16,7 @@ def parser_time_wait(city, transport, number_transport, station):
     take_for_will_be = soup.find_all('span', {"class": "future"})
     for q in take_for_was_and_now:
         soup2 = BeautifulSoup(str(q), 'lxml')
-        #was походу ночью не работает
+        # was походу ночью не работает
         was = soup2.find('span', {"class": "passed"})
         now = soup2.find('span', {"class": "future"})
     for q in take_for_will_be:
@@ -25,6 +25,8 @@ def parser_time_wait(city, transport, number_transport, station):
         all_time = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
 
     return all_time
+
+
 # parser_time_wait('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
 
 
