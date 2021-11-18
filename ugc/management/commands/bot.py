@@ -14,6 +14,7 @@ from ugc.models import Message
 from ugc.models import Profile
 from .parser import parser_time_wait
 
+
 def log_errors(f):
     def inner(*args, **kwargs):
         try:
@@ -42,6 +43,7 @@ def do_count(update: Update, context: CallbackContext):
         text=f'У вас {count} сообщений',
     )
 
+
 @log_errors
 def do_work(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
@@ -57,6 +59,7 @@ def do_work(update: Update, context: CallbackContext):
     update.message.reply_text(
         text=f'От работы --- автобус в {test[0]}, а еще один в {test[1]}',
     )
+
 
 @log_errors
 def do_home(update: Update, context: CallbackContext):
@@ -74,10 +77,15 @@ def do_home(update: Update, context: CallbackContext):
         text=f'От дома --- автобус в {test[0]}, а еще один в {test[1]}',
     )
 
+
 @log_errors
-def do_echo(update: Update, context: CallbackContext):
+def do_test(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
     text = update.message.text
+
+    dd = text
+    uu = [x for x in dd.split(' ')]
+    print(uu)
     # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
     p, _ = Profile.objects.get_or_create(
         external_id=chat_id,
@@ -85,19 +93,47 @@ def do_echo(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
+    test = parser_time_wait(uu[0],uu[1],uu[2],uu[3])
+    update.message.reply_text(
+        text=f'автобус с остановки {uu[3]}:\n в {test[0]} и {test[1]}'
+    )
+
     Message(
         profile=p,
         text=text,
     ).save()
 
-    reply_text = 'Ваш ID ={}\n\n{}'.format(chat_id, text)
-    update.message.reply_text(
-        text=reply_text,
-    )
+
+
+
+
+
+
+# @log_errors
+# def do_echo(update: Update, context: CallbackContext):
+#     chat_id = update.message.chat_id
+#     text = update.message.text
+#     # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
+#     p, _ = Profile.objects.get_or_create(
+#         external_id=chat_id,
+#         defaults={
+#             'name': update.message.from_user.username,
+#         }
+#     )
+#     Message(
+#         profile=p,
+#         text=text,
+#     ).save()
+#
+#     reply_text = 'Ваш ID ={}\n\n{}'.format(chat_id, text)
+#     update.message.reply_text(
+#         text=reply_text,
+#     )
 
 
 class Command(BaseCommand):
     help = 'Телеграм-Бот'
+
 
     def handle(self, *args, **options):
         request = Request(
@@ -115,20 +151,21 @@ class Command(BaseCommand):
             bot=bot,
             use_context=True,
         )
-        message_handler = CommandHandler('count', do_count)
-        updater.dispatcher.add_handler(message_handler)
+        message_handler0 = CommandHandler('count', do_count)
+        updater.dispatcher.add_handler(message_handler0)
 
         message_handler1 = CommandHandler('work', do_work)
         updater.dispatcher.add_handler(message_handler1)
 
-        message_handler2 = CommandHandler('work', do_home)
+        message_handler2 = CommandHandler('home', do_home)
         updater.dispatcher.add_handler(message_handler2)
 
-        message_handler3 = MessageHandler(Filters.text, do_echo)
-        updater.dispatcher.add_handler(message_handler3)
-
-
-
+        message_handler = MessageHandler(Filters.text, do_test)
+        # message_handler = MessageHandler(Filters.all, do_test)
+        updater.dispatcher.add_handler(message_handler)
+        #
+        # message_handler = MessageHandler(Filters.text, do_echo)
+        # updater.dispatcher.add_handler(message_handler)
 
         # 3 -- обработчик
         updater.start_polling()

@@ -6,7 +6,10 @@ def parser_time_wait(city, transport, number_transport, station):
     # парсит время ожидания транспорта: прошлое, будущее, следующее - будущее
     # waiting time for transport soars: past, future, next - future
     url = f'https://kogda.by/routes/{city}/{transport}/{number_transport}/{station}'
-    r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    r = requests.get(url, headers={
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15',
+        'Accept-Language': 'ru',
+    })
     html = r.text
     soup = BeautifulSoup(html, 'lxml')
     take_for_was_and_now = soup.find_all('div', {"class": "content-block-desktop"})
