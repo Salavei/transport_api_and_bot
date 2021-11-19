@@ -125,7 +125,7 @@ def do_live_trans(update: Update, context: CallbackContext):
         }
     )
     # trans_data = parser_all_station()
-    count = SelectedTransport.objects.all()
+    count = SelectedTransport.objects.filter(profile=p)
     uu = [x for x in count]
     print(uu)
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
@@ -145,12 +145,47 @@ def do_live_station(update: Update, context: CallbackContext):
         }
     )
     # trans_data = parser_all_station()
-    count = SelectedStation.objects.all()
+    count = SelectedStation.objects.filter(profile=p)
     uu = [x for x in count]
     print(uu)
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'{uu[0]} \n{uu[1]}',
+        # text=f'{uu[0]} \n{uu[1]}',
+        text=f'{uu[0]} \n{uu[1]}'
+    )
+
+@log_errors
+def do_add_station(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    qqq = SelectedStation.objects.create(profile=p, station="test test test test")
+    qqq.save
+    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+    update.message.reply_text(
+        text=f'маршрут {qqq} добавлен'
+    )
+
+@log_errors
+def do_add_transport(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    qqq = SelectedTransport.objects.create(profile=p, transport="test test test test")
+    qqq.save
+    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+    update.message.reply_text(
+        text=f'транспорт {qqq} добавлен'
     )
 
 @log_errors
@@ -218,6 +253,12 @@ class Command(BaseCommand):
         updater.dispatcher.add_handler(message_handler4)
 
         message_handler4 = CommandHandler('slive', do_live_station)
+        updater.dispatcher.add_handler(message_handler4)
+
+        message_handler4 = CommandHandler('tadd', do_add_transport)
+        updater.dispatcher.add_handler(message_handler4)
+
+        message_handler4 = CommandHandler('sadd', do_add_station)
         updater.dispatcher.add_handler(message_handler4)
 
         # message_handler = CommandHandler('test', do_test)

@@ -56,7 +56,7 @@ class SelectedTransport(models.Model):
         auto_now_add=True,
     )
     def __str__(self):
-        return f'{self.transport}'
+        return f'{list((self.transport).split())}'
 
     class Meta:
         verbose_name = 'Транспорт'
@@ -77,7 +77,7 @@ class SelectedStation(models.Model):
     )
 
     def __str__(self):
-        return f'{self.station}'
+        return f'{list((self.station).split())}'
 
     class Meta:
         verbose_name = 'Маршрут'
