@@ -77,7 +77,7 @@ class SelectedStation(models.Model):
     )
 
     def __str__(self):
-        return f'{list((self.station).split())}'
+        return f'{self.station}'
 
     class Meta:
         verbose_name = 'Маршрут'

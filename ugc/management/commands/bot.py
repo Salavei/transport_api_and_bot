@@ -125,12 +125,18 @@ def do_live_trans(update: Update, context: CallbackContext):
         }
     )
     # trans_data = parser_all_station()
-    count = SelectedTransport.objects.filter(profile=p)
-    uu = [x for x in count]
-    print(uu)
+    take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
+    transport_one = [x for x in str(take_data_transport[0]).split()]
+    transport_two = [x for x in str(take_data_transport[1]).split()]
+    give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
+    give_transport_in_func_two = parser_station(transport_two[0], transport_two[1], transport_two[2])
+
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'{uu[0]} \n{uu[1]}',
+        text=f'автобус {transport_one[2]} маршрут \n{give_transport_in_func_one}\n',
+    )
+    update.message.reply_text(
+        text=f'автобус {transport_two[2]} маршрут \n{give_transport_in_func_two}',
     )
 
 
@@ -144,15 +150,19 @@ def do_live_station(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    # trans_data = parser_all_station()
-    count = SelectedStation.objects.filter(profile=p)
-    uu = [x for x in count]
-    print(uu)
-    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+    take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
+    station_one = [x for x in str(take_data_station[0]).split()]
+    station_two = [x for x in str(take_data_station[1]).split()]
+    give_station_in_func_one = parser_time_wait(station_one[0], station_one[1],station_one[2],station_one[3])
+    give_station_in_func_one = parser_time_wait(station_two[0], station_two[1], station_two[2], station_two[3])
+    # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        # text=f'{uu[0]} \n{uu[1]}',
-        text=f'{uu[0]} \n{uu[1]}'
+        text=f'автобус {station_one[2]} маршрут {station_one[3]}\n{give_station_in_func_one}\n',
     )
+    update.message.reply_text(
+    text = f'автобус {station_two[2]} маршрут {station_two[3]}\n{give_station_in_func_one}',
+    )
+
 
 @log_errors
 def do_add_station(update: Update, context: CallbackContext):
@@ -164,12 +174,14 @@ def do_add_station(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    qqq = SelectedStation.objects.create(profile=p, station="test test test test")
-    qqq.save
+    #not correctly work, need add (add text after the command)
+    add_data_station = SelectedStation.objects.create(profile=p, station="test test test test")
+    add_data_station.save
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'маршрут {qqq} добавлен'
+        text=f'маршрут {add_data_station} добавлен'
     )
+
 
 @log_errors
 def do_add_transport(update: Update, context: CallbackContext):
@@ -181,20 +193,21 @@ def do_add_transport(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    qqq = SelectedTransport.objects.create(profile=p, transport="test test test test")
-    qqq.save
+    # not correctly work, need add (add text after the command)
+    add_data_transport = SelectedTransport.objects.create(profile=p, transport="test test test test")
+    add_data_transport.save
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'транспорт {qqq} добавлен'
+        text=f'транспорт {add_data_transport} добавлен'
     )
+
 
 @log_errors
 def do_test(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
-    text = update.message.text
-    dd = text
-    uu = [x for x in dd.split(' ')]
-    print(uu)
+    text_user = update.message.text
+    list_text_user = [x for x in text_user.split(' ')]
+    print(text_user)
     # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
     p, _ = Profile.objects.get_or_create(
         external_id=chat_id,
@@ -202,17 +215,15 @@ def do_test(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    test = parser_time_wait(uu[0], uu[1], uu[2], uu[3])
+    list_text_user_test_add_func = parser_time_wait(list_text_user[0], list_text_user[1], list_text_user[2], list_text_user[3])
     update.message.reply_text(
-        text=f'автобус с остановки {uu[3]}:\n в {test[0]} и {test[1]}'
+        text=f'автобус с остановки {list_text_user[3]}:\n в {list_text_user_test_add_func[0]} и {list_text_user_test_add_func[1]}'
     )
 
     Message(
         profile=p,
-        ext=text,
+        ext=text_user,
     ).save()
-
-
 
 
 class Command(BaseCommand):
