@@ -56,7 +56,7 @@ class SelectedTransport(models.Model):
         auto_now_add=True,
     )
     def __str__(self):
-        return f'{list((self.transport).split())}'
+        return f'{self.transport}'
 
     class Meta:
         verbose_name = 'Транспорт'

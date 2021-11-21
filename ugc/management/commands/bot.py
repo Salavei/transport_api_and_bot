@@ -16,6 +16,9 @@ from ugc.models import SelectedTransport
 from ugc.models import SelectedStation
 from .parser import parser_time_wait, parser_station, parser_all_station
 
+client_status_station = {}
+client_status_transport = {}
+
 
 def log_errors(f):
     def inner(*args, **kwargs):
@@ -153,14 +156,14 @@ def do_live_station(update: Update, context: CallbackContext):
     take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
     station_one = [x for x in str(take_data_station[0]).split()]
     station_two = [x for x in str(take_data_station[1]).split()]
-    give_station_in_func_one = parser_time_wait(station_one[0], station_one[1],station_one[2],station_one[3])
-    give_station_in_func_one = parser_time_wait(station_two[0], station_two[1], station_two[2], station_two[3])
+    give_station_in_func_one = parser_time_wait(station_one[0], station_one[1], station_one[2], station_one[3])
+    give_station_in_func_two = parser_time_wait(station_two[0], station_two[1], station_two[2], station_two[3])
     # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
         text=f'автобус {station_one[2]} маршрут {station_one[3]}\n{give_station_in_func_one}\n',
     )
     update.message.reply_text(
-    text = f'автобус {station_two[2]} маршрут {station_two[3]}\n{give_station_in_func_one}',
+        text=f'автобус {station_two[2]} маршрут {station_two[3]}\n{give_station_in_func_two}',
     )
 
 
@@ -174,13 +177,53 @@ def do_add_station(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    #not correctly work, need add (add text after the command)
-    add_data_station = SelectedStation.objects.create(profile=p, station="test test test test")
-    add_data_station.save
-    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+    client_status_station[chat_id] = 'wait_for_data_station'
     update.message.reply_text(
-        text=f'маршрут {add_data_station} добавлен'
+        text=f' {chat_id} Enter data station:'
     )
+
+
+@log_errors
+def do_echo_add(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+    text = update.message.text
+    # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    if chat_id in client_status_station and client_status_station[
+        chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
+                                                                                                      flat=True).count() < 2:
+        add_data_station = SelectedStation.objects.create(profile=p, station=text)
+        add_data_station.save
+        del client_status_station[chat_id]
+        update.message.reply_text(
+            text=f'маршрут {add_data_station} добавлен'
+        )
+    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+    elif chat_id in client_status_transport and client_status_transport[
+        chat_id] == 'wait_for_data_transport' and SelectedStation.objects.filter(profile=p).values_list('station',
+                                                                                                        flat=True).count() < 2:
+        add_data_transport = SelectedTransport.objects.create(profile=p, transport=text)
+        add_data_transport.save
+        del client_status_transport[chat_id]
+        # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+        update.message.reply_text(
+            text=f'транспорт {add_data_transport} добавлен'
+        )
+    else:
+        hand_add_st = [x for x in text.split(' ')]
+        hand_trans_data = parser_time_wait(hand_add_st[0], hand_add_st[1], hand_add_st[2], hand_add_st[3])
+        update.message.reply_text(
+            text=f'автобус с остановки {hand_add_st[3]}:\n в {hand_trans_data[0]} и {hand_trans_data[1]}'
+        )
+    Message(
+        profile=p,
+        text=text,
+    ).save()
 
 
 @log_errors
@@ -193,37 +236,12 @@ def do_add_transport(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
+    client_status_transport[chat_id] = 'wait_for_data_transport'
+    update.message.reply_text(
+        text=f' {chat_id} Enter data transport:'
+    )
     # not correctly work, need add (add text after the command)
-    add_data_transport = SelectedTransport.objects.create(profile=p, transport="test test test test")
-    add_data_transport.save
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-    update.message.reply_text(
-        text=f'транспорт {add_data_transport} добавлен'
-    )
-
-
-@log_errors
-def do_test(update: Update, context: CallbackContext):
-    chat_id = update.message.chat_id
-    text_user = update.message.text
-    list_text_user = [x for x in text_user.split(' ')]
-    print(text_user)
-    # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
-    p, _ = Profile.objects.get_or_create(
-        external_id=chat_id,
-        defaults={
-            'name': update.message.from_user.username,
-        }
-    )
-    list_text_user_test_add_func = parser_time_wait(list_text_user[0], list_text_user[1], list_text_user[2], list_text_user[3])
-    update.message.reply_text(
-        text=f'автобус с остановки {list_text_user[3]}:\n в {list_text_user_test_add_func[0]} и {list_text_user_test_add_func[1]}'
-    )
-
-    Message(
-        profile=p,
-        ext=text_user,
-    ).save()
 
 
 class Command(BaseCommand):
@@ -272,13 +290,8 @@ class Command(BaseCommand):
         message_handler4 = CommandHandler('sadd', do_add_station)
         updater.dispatcher.add_handler(message_handler4)
 
-        # message_handler = CommandHandler('test', do_test)
-        message_handler = MessageHandler(Filters.all, do_test)
+        message_handler = MessageHandler(Filters.text, do_echo_add)
         updater.dispatcher.add_handler(message_handler)
-
-        #
-        # message_handler = MessageHandler(Filters.text, do_echo)
-        # updater.dispatcher.add_handler(message_handler)
 
         # 3 -- обработчик
         updater.start_polling()
