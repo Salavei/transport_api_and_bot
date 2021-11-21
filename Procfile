@@ -1,1 +1,2 @@
-worker: python main.py
+worker: python manage.py bot
+worker: python manage.py runserver
