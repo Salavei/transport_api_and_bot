@@ -229,7 +229,6 @@ def do_echo_add(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    import re
     if chat_id in client_status_station and client_status_station[
         chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
                                                                                                       flat=True).count() < 2:
@@ -252,15 +251,63 @@ def do_echo_add(update: Update, context: CallbackContext):
         )
     else:
         hand_add_st = [x for x in text.split(' ')]
-        hand_trans_data = parser_time_wait(hand_add_st[0], hand_add_st[1], hand_add_st[2], hand_add_st[3])
-        update.message.reply_text(
-            text=f'✨ {hand_add_st[1].upper()} 🚍 {hand_add_st[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", hand_add_st[3])}\n{f"🕐{hand_trans_data[0]}       🕐{hand_trans_data[1]}"}\n'
-        )
+        if len(hand_add_st) == 3:
+            hand_trans_data = parser_station(hand_add_st[0], hand_add_st[1], hand_add_st[2])
+            update.message.reply_text(
+                text=f'✨ Направления {hand_add_st[2]} {hand_add_st[1].upper()} 🚍 : \n{hand_trans_data}',
+            )
+        else:
+            hand_trans_data = parser_time_wait(hand_add_st[0], hand_add_st[1], hand_add_st[2], hand_add_st[3])
+            update.message.reply_text(
+                text=f'✨ {hand_add_st[1].upper()} 🚍 {hand_add_st[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", hand_add_st[3])}\n{f"🕐{hand_trans_data[0]}       🕐{hand_trans_data[1]}"}\n'
+            )
     Message(
         profile=p,
         text=text,
     ).save()
 
+@log_errors
+def do_help(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+    text = update.message.text
+    # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    update.message.reply_text(
+        text=f'\n/station - показать направления избранного транспорта'
+             f'\n/allstation - показать все остановки избранного транспорта'
+             f'\n/slive - показать время отправления с избранного транспорта'
+             f'\n/tlive - показать направления избранного транпорта'
+             f'\n/sadd - добавить остановку в избранные(не более 2-ух)'
+             f'\n/tadd - добавить транспорт в избранные(не более 2-ух)',
+    )
+    Message(
+        profile=p,
+        text=text,
+    ).save()
+
+@log_errors
+def do_start(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+    text = update.message.text
+    # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    update.message.reply_text(
+        text=f'Привет, для начала предлагаю тебе ознакомиться с командами бота\n /help',
+    )
+    Message(
+        profile=p,
+        text=text,
+    ).save()
 
 class Command(BaseCommand):
     help = 'Телеграм-Бот'
@@ -301,6 +348,12 @@ class Command(BaseCommand):
 
         message_handler5 = CommandHandler('sadd', do_add_station)
         updater.dispatcher.add_handler(message_handler5)
+
+        message_handler6 = CommandHandler('help', do_help)
+        updater.dispatcher.add_handler(message_handler6)
+
+        message_handler7 = CommandHandler('start', do_start)
+        updater.dispatcher.add_handler(message_handler7)
 
         message_handler = MessageHandler(Filters.text, do_echo_add)
         updater.dispatcher.add_handler(message_handler)
