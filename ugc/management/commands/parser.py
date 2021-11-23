@@ -46,7 +46,7 @@ def parser_station(city, transport, number_transport):
     for q in second_way:
         soup2 = BeautifulSoup(str(q), 'lxml')
         second = soup2.find('a').contents[0]
-    return f"{' '.join(first.text.split())} \n {' '.join(second.text.split())}"
+    return f"⬅️{' '.join(first.text.split())} \n➡️{' '.join(second.text.split())}"
 
 
 # parser_station('minsk','autobus','69')
@@ -61,5 +61,5 @@ def parser_all_station(city, transport, number_transport):
     soup = BeautifulSoup(html, 'lxml')
     firs_all_station = soup.find('ul', {"class": "list-group"}).text
     second_all_station = soup.find('div', {"id": "direction-1"}).text
-    return f"{' '.join(firs_all_station.split())} \n \n{' '.join(second_all_station.split())}"
+    return f"⬅️ {' '.join(firs_all_station.split())} \n \n➡️ {' '.join(second_all_station.split())}"
 # parser_all_station('minsk','autobus','69')

@@ -52,40 +52,6 @@ def do_count(update: Update, context: CallbackContext):
 
 
 @log_errors
-def do_work(update: Update, context: CallbackContext):
-    chat_id = update.message.chat_id
-
-    p, _ = Profile.objects.get_or_create(
-        external_id=chat_id,
-        defaults={
-            'name': update.message.from_user.username,
-        }
-    )
-    test = parser_time_wait('minsk', 'autobus', '24', 'ДС Зелёный Луг-6 - Воронянского/Романовская Слобода')
-
-    update.message.reply_text(
-        text=f'От работы --- автобус в {test[0]}, а еще один в {test[1]}',
-    )
-
-
-@log_errors
-def do_home(update: Update, context: CallbackContext):
-    chat_id = update.message.chat_id
-
-    p, _ = Profile.objects.get_or_create(
-        external_id=chat_id,
-        defaults={
-            'name': update.message.from_user.username,
-        }
-    )
-    test = parser_time_wait('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
-
-    update.message.reply_text(
-        text=f'От дома --- автобус в {test[0]}, а еще один в {test[1]}',
-    )
-
-
-@log_errors
 def do_station(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
 
@@ -102,10 +68,10 @@ def do_station(update: Update, context: CallbackContext):
     give_transport_in_func_two = parser_station(transport_two[0], transport_two[1], transport_two[2])
 
     update.message.reply_text(
-        text=f'Направления {transport_one[2]} \n {give_transport_in_func_one}',
+        text=f'✨ Направления {transport_one[2]} {transport_one[1].upper()} 🚍 : \n{give_transport_in_func_one}',
     )
     update.message.reply_text(
-        text=f'Направления {transport_two[2]} \n {give_transport_in_func_two}',
+        text=f'✨ Направления {transport_two[2]} {transport_two[1].upper()} 🚍 : \n{give_transport_in_func_two}',
     )
 
 
@@ -126,10 +92,10 @@ def do_allstation(update: Update, context: CallbackContext):
     give_transport_in_func_two = parser_all_station(transport_two[0], transport_two[1], transport_two[2])
 
     update.message.reply_text(
-        text=f'Все остановки {transport_one[2]}\n {give_transport_in_func_one}',
+        text=f'✨ Все остановки🚏 {transport_one[1].upper()} 🚍: {transport_one[2]}\n {give_transport_in_func_one}',
     )
     update.message.reply_text(
-        text=f'Все остановки {transport_two[2]} \n {give_transport_in_func_two}',
+        text=f'✨ Все остановки🚏 {transport_two[1].upper()} 🚍: {transport_two[2]} \n {give_transport_in_func_two}',
     )
 
 
@@ -152,10 +118,10 @@ def do_live_trans(update: Update, context: CallbackContext):
 
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'{transport_one[1]} {transport_one[2]}\nмаршрут -- \n{give_transport_in_func_one}\n',
+        text=f'✨ {transport_one[1].upper()} 🚍 {transport_one[2]}\n✨ Направления транспорта 🚏: \n{give_transport_in_func_one}\n',
     )
     update.message.reply_text(
-        text=f'{transport_two[1]} {transport_two[2]}\nмаршрут -- \n{give_transport_in_func_two}',
+        text=f'✨ {transport_two[1].upper()} 🚍 {transport_two[2]}\n✨ Направления транспорта 🚏: \n{give_transport_in_func_two}',
     )
 
 
@@ -176,9 +142,9 @@ def do_live_station(update: Update, context: CallbackContext):
     give_station_in_func_two = parser_time_wait(station_two[0], station_two[1], station_two[2], station_two[3])
     # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'{station_one[1]} {station_one[2]}\nмаршрут -- {re.sub("%20", " ", station_one[3])}\n{give_station_in_func_one}\n')
+        text=f'✨ {station_one[1].upper()} 🚍 {station_one[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", station_one[3])}\n{f"🕐{give_station_in_func_one[0]}       🕐{give_station_in_func_one[1]}"}\n')
     update.message.reply_text(
-        text=f'{station_two[1]} {station_two[2]}\n маршрут -- {re.sub("%20", " ", station_one[3])}\n{give_station_in_func_two}',
+        text=f'✨ {station_two[1].upper()} 🚍 {station_two[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", station_two[3])}\n{f"🕐{give_station_in_func_two[0]}       🕐{give_station_in_func_two[1]}"}',
     )
 
 
@@ -192,10 +158,38 @@ def do_add_station(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    client_status_station[chat_id] = 'wait_for_data_station'
-    update.message.reply_text(
-        text=f' {chat_id} Enter data station:'
+    if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() >= 2:
+        update.message.reply_text(
+            text=f'❌ Нельзя добавить больше 2-ух остановок ❌'
+        )
+    else:
+        client_status_station[chat_id] = 'wait_for_data_station'
+        update.message.reply_text(
+            text=f'🛠Добавить избранную остановку:'
+        )
+
+
+@log_errors
+def do_add_transport(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
     )
+    if SelectedTransport.objects.filter(profile=p).values_list('transport',flat=True).count() >= 2:
+        update.message.reply_text(
+            text=f'❌ Нельзя добавить больше 2-ух транспорта❌'
+        )
+    else:
+        client_status_transport[chat_id] = 'wait_for_data_transport'
+        update.message.reply_text(
+            text=f'🛠Добавить избранный транспорт:'
+        )
+    # not correctly work, need add (add text after the command)
+    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
 
 
 @log_errors
@@ -212,52 +206,34 @@ def do_echo_add(update: Update, context: CallbackContext):
     import re
     if chat_id in client_status_station and client_status_station[
         chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
-                                                                                        flat=True).count() < 2:
+                                                                                                      flat=True).count() < 2:
         add_data_station = SelectedStation.objects.create(profile=p, station=text)
         add_data_station.save
         del client_status_station[chat_id]
         update.message.reply_text(
-            text=f'маршрут {add_data_station} добавлен'
+            text=f'✨ Маршрут 🚏: {add_data_station} добавлен ✅'
         )
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     elif chat_id in client_status_transport and client_status_transport[
         chat_id] == 'wait_for_data_transport' and SelectedTransport.objects.filter(profile=p).values_list('transport',
-                                                                                                        flat=True).count() < 2:
+                                                                                                          flat=True).count() < 2:
         add_data_transport = SelectedTransport.objects.create(profile=p, transport=text)
         add_data_transport.save
         del client_status_transport[chat_id]
         # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
         update.message.reply_text(
-            text=f'транспорт {add_data_transport} добавлен'
+            text=f'✨ Транспорт 🚍: {add_data_transport} добавлен ✅'
         )
     else:
         hand_add_st = [x for x in text.split(' ')]
         hand_trans_data = parser_time_wait(hand_add_st[0], hand_add_st[1], hand_add_st[2], hand_add_st[3])
         update.message.reply_text(
-            text=f'автобус с остановки {hand_add_st[3]}:\n в {hand_trans_data[0]} и {hand_trans_data[1]}'
+            text=f'✨ {hand_add_st[1].upper()} 🚍 {hand_add_st[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", hand_add_st[3])}\n{f"🕐{hand_trans_data[0]}       🕐{hand_trans_data[1]}"}\n'
         )
     Message(
         profile=p,
         text=text,
     ).save()
-
-
-@log_errors
-def do_add_transport(update: Update, context: CallbackContext):
-    chat_id = update.message.chat_id
-
-    p, _ = Profile.objects.get_or_create(
-        external_id=chat_id,
-        defaults={
-            'name': update.message.from_user.username,
-        }
-    )
-    client_status_transport[chat_id] = 'wait_for_data_transport'
-    update.message.reply_text(
-        text=f' {chat_id} Enter data transport:'
-    )
-    # not correctly work, need add (add text after the command)
-    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
 
 
 class Command(BaseCommand):
@@ -282,20 +258,14 @@ class Command(BaseCommand):
         message_handler0 = CommandHandler('count', do_count)
         updater.dispatcher.add_handler(message_handler0)
 
-        message_handler1 = CommandHandler('work', do_work)
+        message_handler1 = CommandHandler('station', do_station)
         updater.dispatcher.add_handler(message_handler1)
 
-        message_handler2 = CommandHandler('home', do_home)
+        message_handler2 = CommandHandler('allstation', do_allstation)
         updater.dispatcher.add_handler(message_handler2)
 
-        message_handler3 = CommandHandler('station', do_station)
+        message_handler3 = CommandHandler('tlive', do_live_trans)
         updater.dispatcher.add_handler(message_handler3)
-
-        message_handler4 = CommandHandler('allstation', do_allstation)
-        updater.dispatcher.add_handler(message_handler4)
-
-        message_handler4 = CommandHandler('tlive', do_live_trans)
-        updater.dispatcher.add_handler(message_handler4)
 
         message_handler4 = CommandHandler('slive', do_live_station)
         updater.dispatcher.add_handler(message_handler4)
@@ -303,8 +273,8 @@ class Command(BaseCommand):
         message_handler4 = CommandHandler('tadd', do_add_transport)
         updater.dispatcher.add_handler(message_handler4)
 
-        message_handler4 = CommandHandler('sadd', do_add_station)
-        updater.dispatcher.add_handler(message_handler4)
+        message_handler5 = CommandHandler('sadd', do_add_station)
+        updater.dispatcher.add_handler(message_handler5)
 
         message_handler = MessageHandler(Filters.text, do_echo_add)
         updater.dispatcher.add_handler(message_handler)
