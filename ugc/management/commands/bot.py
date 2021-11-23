@@ -85,18 +85,30 @@ def do_allstation(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
-    transport_one = [x for x in str(take_data_transport[0]).split()]
-    transport_two = [x for x in str(take_data_transport[1]).split()]
-    give_transport_in_func_one = parser_all_station(transport_one[0], transport_one[1], transport_one[2])
-    give_transport_in_func_two = parser_all_station(transport_two[0], transport_two[1], transport_two[2])
+    if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 0:
+        update.message.reply_text(
+            text='У вас нет transport'
+        )
+    elif SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 1:
+        take_data_transport = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
+        transport_one = [x for x in str(take_data_transport[0]).split()]
+        give_transport_in_func_one = parser_all_station(transport_one[0], transport_one[1], transport_one[2])
+        update.message.reply_text(
+            text=f'✨ Все остановки🚏 {transport_one[1].upper()} 🚍: {transport_one[2]}\n {give_transport_in_func_one}',
+        )
+    else:
+        take_data_transport = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
+        transport_one = [x for x in str(take_data_transport[0]).split()]
+        transport_two = [x for x in str(take_data_transport[1]).split()]
+        give_transport_in_func_one = parser_all_station(transport_one[0], transport_one[1], transport_one[2])
+        give_transport_in_func_two = parser_all_station(transport_two[0], transport_two[1], transport_two[2])
 
-    update.message.reply_text(
-        text=f'✨ Все остановки🚏 {transport_one[1].upper()} 🚍: {transport_one[2]}\n {give_transport_in_func_one}',
-    )
-    update.message.reply_text(
-        text=f'✨ Все остановки🚏 {transport_two[1].upper()} 🚍: {transport_two[2]} \n {give_transport_in_func_two}',
-    )
+        update.message.reply_text(
+            text=f'✨ Все остановки🚏 {transport_one[1].upper()} 🚍: {transport_one[2]}\n {give_transport_in_func_one}',
+        )
+        update.message.reply_text(
+            text=f'✨ Все остановки🚏 {transport_two[1].upper()} 🚍: {transport_two[2]} \n {give_transport_in_func_two}',
+        )
 
 
 @log_errors
@@ -219,52 +231,100 @@ def do_add_transport(update: Update, context: CallbackContext):
 
 
 @log_errors
-def do_echo_add(update: Update, context: CallbackContext):
+def do_dell_transport(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
-    text = update.message.text
-    # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
+
     p, _ = Profile.objects.get_or_create(
         external_id=chat_id,
         defaults={
             'name': update.message.from_user.username,
         }
     )
-    if chat_id in client_status_station and client_status_station[
-        chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
-                                                                                                      flat=True).count() < 2:
-        add_data_station = SelectedStation.objects.create(profile=p, station=text)
-        add_data_station.save
-        del client_status_station[chat_id]
+    if SelectedTransport.objects.filter(profile=p).values_list('transport',flat=True).count() == 0:
         update.message.reply_text(
-            text=f'✨ Маршрут 🚏: {add_data_station} добавлен ✅'
-        )
-    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-    elif chat_id in client_status_transport and client_status_transport[
-        chat_id] == 'wait_for_data_transport' and SelectedTransport.objects.filter(profile=p).values_list('transport',
-                                                                                                          flat=True).count() < 2:
-        add_data_transport = SelectedTransport.objects.create(profile=p, transport=text)
-        add_data_transport.save
-        del client_status_transport[chat_id]
-        # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-        update.message.reply_text(
-            text=f'✨ Транспорт 🚍: {add_data_transport} добавлен ✅'
+            text=f'❌ У Вас нет транспорта❌'
         )
     else:
-        hand_add_st = [x for x in text.split(' ')]
-        if len(hand_add_st) == 3:
-            hand_trans_data = parser_station(hand_add_st[0], hand_add_st[1], hand_add_st[2])
+        tran = SelectedTransport.objects.filter(profile=p).delete()
+        update.message.reply_text(
+            text=f'🛠{tran} удален'
+        )
+
+@log_errors
+def do_dell_station(update: Update, context: CallbackContext):
+    chat_id = update.message.chat_id
+
+    p, _ = Profile.objects.get_or_create(
+        external_id=chat_id,
+        defaults={
+            'name': update.message.from_user.username,
+        }
+    )
+    if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 0:
+        update.message.reply_text(
+            text=f'❌ У Вас нет остановок❌'
+        )
+    else:
+        tran = SelectedStation.objects.filter(profile=p).delete()
+        update.message.reply_text(
+            text=f'🛠{tran} удален'
+        )
+
+@log_errors
+
+def do_echo_add(update: Update, context: CallbackContext):
+    try:
+        chat_id = update.message.chat_id
+        text = update.message.text
+        # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
+        p, _ = Profile.objects.get_or_create(
+            external_id=chat_id,
+            defaults={
+                'name': update.message.from_user.username,
+            }
+        )
+        if chat_id in client_status_station and client_status_station[
+            chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
+                                                                                                          flat=True).count() < 2:
+            add_data_station = SelectedStation.objects.create(profile=p, station=text)
+            add_data_station.save
+            del client_status_station[chat_id]
+            station_one = [x for x in text.split()]
             update.message.reply_text(
-                text=f'✨ Направления {hand_add_st[2]} {hand_add_st[1].upper()} 🚍 : \n{hand_trans_data}',
+                text=f'✨ Маршрут 🚏: {re.sub("/", " от остановки 🚏: ", re.sub("%20", " ", station_one[3]))} добавлен ✅'
             )
+        # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+        elif chat_id in client_status_transport and client_status_transport[
+            chat_id] == 'wait_for_data_transport' and SelectedTransport.objects.filter(profile=p).values_list('transport',
+                                                                                                              flat=True).count() < 2:
+            add_data_transport = SelectedTransport.objects.create(profile=p, transport=text)
+            add_data_transport.save
+            del client_status_transport[chat_id]
+            # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+            update.message.reply_text(
+                text=f'✨ Транспорт 🚍: {add_data_transport} добавлен ✅'
+            )
+
         else:
-            hand_trans_data = parser_time_wait(hand_add_st[0], hand_add_st[1], hand_add_st[2], hand_add_st[3])
-            update.message.reply_text(
-                text=f'✨ {hand_add_st[1].upper()} 🚍 {hand_add_st[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", hand_add_st[3])}\n{f"🕐{hand_trans_data[0]}       🕐{hand_trans_data[1]}"}\n'
-            )
-    Message(
-        profile=p,
-        text=text,
-    ).save()
+            hand_add_st = [x for x in text.split(' ')]
+            if len(hand_add_st) == 3:
+                hand_trans_data = parser_station(hand_add_st[0], hand_add_st[1], hand_add_st[2])
+                update.message.reply_text(
+                    text=f'✨ Направления {hand_add_st[2]} {hand_add_st[1].upper()} 🚍 : \n{hand_trans_data}',
+                )
+            else:
+                hand_trans_data = parser_time_wait(hand_add_st[0], hand_add_st[1], hand_add_st[2], hand_add_st[3])
+                update.message.reply_text(
+                    text=f'✨ {hand_add_st[1].upper()} 🚍 {hand_add_st[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", hand_add_st[3])}\n{f"🕐{hand_trans_data[0]}       🕐{hand_trans_data[1]}"}\n'
+                )
+        Message(
+            profile=p,
+            text=text,
+        ).save()
+    except IndexError:
+        update.message.reply_text(
+            text=f'❌ Неверый ввод ❌',
+        )
 
 @log_errors
 def do_help(update: Update, context: CallbackContext):
@@ -283,7 +343,9 @@ def do_help(update: Update, context: CallbackContext):
              f'\n/slive - показать время отправления с избранного транспорта'
              f'\n/tlive - показать направления избранного транпорта'
              f'\n/sadd - добавить остановку в избранные(не более 2-ух)'
-             f'\n/tadd - добавить транспорт в избранные(не более 2-ух)',
+             f'\n/tadd - добавить транспорт в избранные(не более 2-ух)'
+             f'\nminsk autobus 69 покажет направления автобуса'
+             f'\nminsk autobus 69 Масюковщина%20-%20Вокзал/2-е%20кольцо покажет время до автобуса',
     )
     Message(
         profile=p,
@@ -354,6 +416,13 @@ class Command(BaseCommand):
 
         message_handler7 = CommandHandler('start', do_start)
         updater.dispatcher.add_handler(message_handler7)
+
+        message_handler8 = CommandHandler('tdell', do_dell_transport)
+        updater.dispatcher.add_handler(message_handler8)
+
+        message_handler9 = CommandHandler('sdell', do_dell_station)
+        updater.dispatcher.add_handler(message_handler9)
+
 
         message_handler = MessageHandler(Filters.text, do_echo_add)
         updater.dispatcher.add_handler(message_handler)
