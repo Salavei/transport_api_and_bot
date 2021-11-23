@@ -109,20 +109,31 @@ def do_live_trans(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    # trans_data = parser_all_station()
-    take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
-    transport_one = [x for x in str(take_data_transport[0]).split()]
-    transport_two = [x for x in str(take_data_transport[1]).split()]
-    give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
-    give_transport_in_func_two = parser_station(transport_two[0], transport_two[1], transport_two[2])
+    if SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 0:
+        update.message.reply_text(
+            text='У вас нет transport'
+        )
+    elif SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 1:
+        take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
+        transport_one = [x for x in str(take_data_transport[0]).split()]
+        give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
+        update.message.reply_text(
+            text=f'✨ {transport_one[1].upper()} 🚍 {transport_one[2]}\n✨ Направления транспорта 🚏: \n{give_transport_in_func_one}\n',
+        )
+    else:
+        take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
+        transport_one = [x for x in str(take_data_transport[0]).split()]
+        transport_two = [x for x in str(take_data_transport[1]).split()]
+        give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
+        give_transport_in_func_two = parser_station(transport_two[0], transport_two[1], transport_two[2])
 
-    # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-    update.message.reply_text(
-        text=f'✨ {transport_one[1].upper()} 🚍 {transport_one[2]}\n✨ Направления транспорта 🚏: \n{give_transport_in_func_one}\n',
-    )
-    update.message.reply_text(
-        text=f'✨ {transport_two[1].upper()} 🚍 {transport_two[2]}\n✨ Направления транспорта 🚏: \n{give_transport_in_func_two}',
-    )
+        # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+        update.message.reply_text(
+            text=f'✨ {transport_one[1].upper()} 🚍 {transport_one[2]}\n✨ Направления транспорта 🚏: \n{give_transport_in_func_one}\n',
+        )
+        update.message.reply_text(
+            text=f'✨ {transport_two[1].upper()} 🚍 {transport_two[2]}\n✨ Направления транспорта 🚏: \n{give_transport_in_func_two}',
+        )
 
 
 @log_errors
@@ -135,17 +146,32 @@ def do_live_station(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
-    station_one = [x for x in str(take_data_station[0]).split()]
-    station_two = [x for x in str(take_data_station[1]).split()]
-    give_station_in_func_one = parser_time_wait(station_one[0], station_one[1], station_one[2], station_one[3])
-    give_station_in_func_two = parser_time_wait(station_two[0], station_two[1], station_two[2], station_two[3])
-    # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-    update.message.reply_text(
-        text=f'✨ {station_one[1].upper()} 🚍 {station_one[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", station_one[3])}\n{f"🕐{give_station_in_func_one[0]}       🕐{give_station_in_func_one[1]}"}\n')
-    update.message.reply_text(
-        text=f'✨ {station_two[1].upper()} 🚍 {station_two[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", station_two[3])}\n{f"🕐{give_station_in_func_two[0]}       🕐{give_station_in_func_two[1]}"}',
-    )
+    if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 0:
+        update.message.reply_text(
+            text='У вас нет station'
+        )
+    elif SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 1:
+        take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
+        station_one = [x for x in str(take_data_station[0]).split()]
+        give_station_in_func_one = parser_time_wait(station_one[0], station_one[1], station_one[2], station_one[3])
+        # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+        update.message.reply_text(
+            text=f'✨ {station_one[1].upper()} 🚍 {station_one[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", station_one[3])}'
+                 f'\n{f"🕐{give_station_in_func_one[0]}       🕐{give_station_in_func_one[1]}"}\n')
+    else:
+        take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
+        station_one = [x for x in str(take_data_station[0]).split()]
+        station_two = [x for x in str(take_data_station[1]).split()]
+        give_station_in_func_one = parser_time_wait(station_one[0], station_one[1], station_one[2], station_one[3])
+        give_station_in_func_two = parser_time_wait(station_two[0], station_two[1], station_two[2], station_two[3])
+        # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+        update.message.reply_text(
+            text=f'✨ {station_one[1].upper()} 🚍 {station_one[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", station_one[3])}'
+                 f'\n{f"🕐{give_station_in_func_one[0]}       🕐{give_station_in_func_one[1]}"}\n')
+        update.message.reply_text(
+            text=f'✨ {station_two[1].upper()} 🚍 {station_two[2]}\n✨ Остановка 🚏: \n{re.sub("%20", " ", station_two[3])}'
+                 f'\n{f"🕐{give_station_in_func_two[0]}       🕐{give_station_in_func_two[1]}"}',
+        )
 
 
 @log_errors
