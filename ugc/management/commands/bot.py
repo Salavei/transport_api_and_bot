@@ -16,6 +16,8 @@ from ugc.models import SelectedTransport
 from ugc.models import SelectedStation
 from .parser import parser_time_wait, parser_station, parser_all_station
 
+import re
+
 client_status_station = {}
 client_status_transport = {}
 
@@ -59,7 +61,7 @@ def do_work(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    test = parser_time_wait('minsk', 'autobus', '24', 'ДС%20Зелёный%20Луг-6%20-%20Воронянского/Романовская%20Слобода')
+    test = parser_time_wait('minsk', 'autobus', '24', 'ДС Зелёный Луг-6 - Воронянского/Романовская Слобода')
 
     update.message.reply_text(
         text=f'От работы --- автобус в {test[0]}, а еще один в {test[1]}',
@@ -93,10 +95,17 @@ def do_station(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    trans_data = parser_station('minsk', 'autobus', '24')
+    take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
+    transport_one = [x for x in str(take_data_transport[0]).split()]
+    transport_two = [x for x in str(take_data_transport[1]).split()]
+    give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
+    give_transport_in_func_two = parser_station(transport_two[0], transport_two[1], transport_two[2])
 
     update.message.reply_text(
-        text=f'Направления автобуса \n {trans_data}',
+        text=f'Направления {transport_one[2]} \n {give_transport_in_func_one}',
+    )
+    update.message.reply_text(
+        text=f'Направления {transport_two[2]} \n {give_transport_in_func_two}',
     )
 
 
@@ -110,10 +119,17 @@ def do_allstation(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    trans_data = parser_all_station('minsk', 'autobus', '24')
+    take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
+    transport_one = [x for x in str(take_data_transport[0]).split()]
+    transport_two = [x for x in str(take_data_transport[1]).split()]
+    give_transport_in_func_one = parser_all_station(transport_one[0], transport_one[1], transport_one[2])
+    give_transport_in_func_two = parser_all_station(transport_two[0], transport_two[1], transport_two[2])
 
     update.message.reply_text(
-        text=f'Все остановки автобуса \n {trans_data}',
+        text=f'Все остановки {transport_one[2]}\n {give_transport_in_func_one}',
+    )
+    update.message.reply_text(
+        text=f'Все остановки {transport_two[2]} \n {give_transport_in_func_two}',
     )
 
 
@@ -136,10 +152,10 @@ def do_live_trans(update: Update, context: CallbackContext):
 
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'автобус {transport_one[2]} маршрут \n{give_transport_in_func_one}\n',
+        text=f'{transport_one[1]} {transport_one[2]}\nмаршрут -- \n{give_transport_in_func_one}\n',
     )
     update.message.reply_text(
-        text=f'автобус {transport_two[2]} маршрут \n{give_transport_in_func_two}',
+        text=f'{transport_two[1]} {transport_two[2]}\nмаршрут -- \n{give_transport_in_func_two}',
     )
 
 
@@ -160,10 +176,9 @@ def do_live_station(update: Update, context: CallbackContext):
     give_station_in_func_two = parser_time_wait(station_two[0], station_two[1], station_two[2], station_two[3])
     # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     update.message.reply_text(
-        text=f'автобус {station_one[2]} маршрут {station_one[3]}\n{give_station_in_func_one}\n',
-    )
+        text=f'{station_one[1]} {station_one[2]}\nмаршрут -- {re.sub("%20", " ", station_one[3])}\n{give_station_in_func_one}\n')
     update.message.reply_text(
-        text=f'автобус {station_two[2]} маршрут {station_two[3]}\n{give_station_in_func_two}',
+        text=f'{station_two[1]} {station_two[2]}\n маршрут -- {re.sub("%20", " ", station_one[3])}\n{give_station_in_func_two}',
     )
 
 
@@ -194,9 +209,10 @@ def do_echo_add(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
+    import re
     if chat_id in client_status_station and client_status_station[
         chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
-                                                                                                      flat=True).count() < 2:
+                                                                                        flat=True).count() < 2:
         add_data_station = SelectedStation.objects.create(profile=p, station=text)
         add_data_station.save
         del client_status_station[chat_id]
@@ -205,7 +221,7 @@ def do_echo_add(update: Update, context: CallbackContext):
         )
     # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
     elif chat_id in client_status_transport and client_status_transport[
-        chat_id] == 'wait_for_data_transport' and SelectedStation.objects.filter(profile=p).values_list('station',
+        chat_id] == 'wait_for_data_transport' and SelectedTransport.objects.filter(profile=p).values_list('transport',
                                                                                                         flat=True).count() < 2:
         add_data_transport = SelectedTransport.objects.create(profile=p, transport=text)
         add_data_transport.save

@@ -27,7 +27,7 @@ def parser_time_wait(city, transport, number_transport, station):
     return all_time
 
 
-# parser_time_wait('minsk', 'autobus', '24', 'Воронянского%20-%20ДС%20Зелёный%20Луг-6/Жуковского')
+# parser_time_wait('minsk', 'autobus', '24', 'Воронянского ДС Зелёный Луг-6/Жуковского')
 
 
 def parser_station(city, transport, number_transport):
