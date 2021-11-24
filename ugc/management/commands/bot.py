@@ -85,19 +85,19 @@ def do_allstation(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 0:
+    if SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 0:
         update.message.reply_text(
             text='У вас нет transport'
         )
-    elif SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 1:
-        take_data_transport = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
+    elif SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 1:
+        take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
         transport_one = [x for x in str(take_data_transport[0]).split()]
         give_transport_in_func_one = parser_all_station(transport_one[0], transport_one[1], transport_one[2])
         update.message.reply_text(
             text=f'✨ Все остановки🚏 {transport_one[1].upper()} 🚍: {transport_one[2]}\n {give_transport_in_func_one}',
         )
     else:
-        take_data_transport = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
+        take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
         transport_one = [x for x in str(take_data_transport[0]).split()]
         transport_two = [x for x in str(take_data_transport[1]).split()]
         give_transport_in_func_one = parser_all_station(transport_one[0], transport_one[1], transport_one[2])
