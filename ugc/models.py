@@ -10,6 +10,9 @@ class Profile(models.Model):
     )
     name = models.TextField(
         verbose_name='Имя пользователя',
+        null=True,
+        blank=True,
+
     )
 
     def __str__(self):
