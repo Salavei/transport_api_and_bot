@@ -61,18 +61,30 @@ def do_station(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
-    transport_one = [x for x in str(take_data_transport[0]).split()]
-    transport_two = [x for x in str(take_data_transport[1]).split()]
-    give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
-    give_transport_in_func_two = parser_station(transport_two[0], transport_two[1], transport_two[2])
+    if SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 0:
+        update.message.reply_text(
+            text='У вас нет transport'
+        )
+    elif SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 1:
+        take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
+        transport_one = [x for x in str(take_data_transport[0]).split()]
+        give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
+        update.message.reply_text(
+            text=f'✨ Направления {transport_one[2]} {transport_one[1].upper()} 🚍 : \n{give_transport_in_func_one}',
+        )
+    else:
+        take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
+        transport_one = [x for x in str(take_data_transport[0]).split()]
+        transport_two = [x for x in str(take_data_transport[1]).split()]
+        give_transport_in_func_one = parser_station(transport_one[0], transport_one[1], transport_one[2])
+        give_transport_in_func_two = parser_station(transport_two[0], transport_two[1], transport_two[2])
 
-    update.message.reply_text(
-        text=f'✨ Направления {transport_one[2]} {transport_one[1].upper()} 🚍 : \n{give_transport_in_func_one}',
-    )
-    update.message.reply_text(
-        text=f'✨ Направления {transport_two[2]} {transport_two[1].upper()} 🚍 : \n{give_transport_in_func_two}',
-    )
+        update.message.reply_text(
+            text=f'✨ Направления {transport_one[2]} {transport_one[1].upper()} 🚍 : \n{give_transport_in_func_one}',
+        )
+        update.message.reply_text(
+            text=f'✨ Направления {transport_two[2]} {transport_two[1].upper()} 🚍 : \n{give_transport_in_func_two}',
+        )
 
 
 @log_errors
