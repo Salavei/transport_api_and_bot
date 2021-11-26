@@ -231,9 +231,13 @@ def do_echo_add(update: Update, context: CallbackContext):
         else:
             hand_add_st = [x for x in text.split(' ')]
             if len(hand_add_st) == 2:
-                hand_trans_data = parser_station(hand_add_st[0], hand_add_st[1])
+                # hand_trans_data = parser_station(hand_add_st[0], hand_add_st[1])
+                # update.message.reply_text(
+                #     text=f'✨ Направления {hand_add_st[1]} {hand_add_st[0].upper()} 🚍 : \n{hand_trans_data}',
+                # )
+                hand_trans_data = parser_all_station(hand_add_st[0], hand_add_st[1])
                 update.message.reply_text(
-                    text=f'✨ Направления {hand_add_st[1]} {hand_add_st[0].upper()} 🚍 : \n{hand_trans_data}',
+                    text=f'✨ Все остановки🚏 {hand_add_st[0].upper()} 🚍: {hand_add_st[1]}\n {hand_trans_data}',
                 )
             else:
                 hand_trans_data = parser_station_n(hand_add_st[0], hand_add_st[1], hand_add_st[2])

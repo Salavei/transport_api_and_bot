@@ -4,40 +4,42 @@ import re
 
 
 def parser_time_wait(hah, hah_two, left, right, station):
-    r = requests.get(hah, headers={
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15',
-        'Accept-Language': 'ru',
-    })
-    r_two = requests.get(hah_two, headers={
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15',
-        'Accept-Language': 'ru',
-    })
-    html = r.text
-    html_two = r_two.text
-    soup = BeautifulSoup(html, 'lxml')
-
-    take_for_was_and_now = soup.find_all('div', {"class": "content-block-desktop"})
-    take_for_will_be = soup.find_all('span', {"class": "future"})
-    for q in take_for_was_and_now:
-        soup2 = BeautifulSoup(str(q), 'lxml')
-        now = soup2.find('span', {"class": "future"})
-    for q in take_for_will_be:
-        soup2 = BeautifulSoup(str(q), 'lxml')
-        will_be = soup2.find('span')
-        all_time = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
-
-    soup_two = BeautifulSoup(html_two, 'lxml')
-    take_for_was_and_now_two = soup_two.find_all('div', {"class": "content-block-desktop"})
-    take_for_will_be_two = soup_two.find_all('span', {"class": "future"})
-    for q in take_for_was_and_now_two:
-        soup2 = BeautifulSoup(str(q), 'lxml')
-        now = soup2.find('span', {"class": "future"})
-    for q in take_for_will_be_two:
-        soup2 = BeautifulSoup(str(q), 'lxml')
-        will_be = soup2.find('span')
-        all_time_two = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
-
-    # return print(all_time, all_time_two, sep='\n')
+    if hah == None:
+        all_time = ' ❗️Такой отановки в этом направлении не существует❗️'
+    else:
+        r = requests.get(hah, headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15',
+            'Accept-Language': 'ru',
+        })
+        html = r.text
+        soup = BeautifulSoup(html, 'lxml')
+        take_for_was_and_now = soup.find_all('div', {"class": "content-block-desktop"})
+        take_for_will_be = soup.find_all('span', {"class": "future"})
+        for q in take_for_was_and_now:
+            soup2 = BeautifulSoup(str(q), 'lxml')
+            now = soup2.find('span', {"class": "future"})
+        for q in take_for_will_be:
+            soup2 = BeautifulSoup(str(q), 'lxml')
+            will_be = soup2.find('span')
+            all_time = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
+    if hah_two == None:
+        all_time_two = ' ❗️Такой отановки в этом направлении не существует❗️'
+    else:
+        r_two = requests.get(hah_two, headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15',
+            'Accept-Language': 'ru',
+        })
+        html_two = r_two.text
+        soup_two = BeautifulSoup(html_two, 'lxml')
+        take_for_was_and_now_two = soup_two.find_all('div', {"class": "content-block-desktop"})
+        take_for_will_be_two = soup_two.find_all('span', {"class": "future"})
+        for q in take_for_was_and_now_two:
+            soup2 = BeautifulSoup(str(q), 'lxml')
+            now = soup2.find('span', {"class": "future"})
+        for q in take_for_will_be_two:
+            soup2 = BeautifulSoup(str(q), 'lxml')
+            will_be = soup2.find('span')
+            all_time_two = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
     return f"⬅️{' '.join(left.text.split())}\n🕐{all_time} \n", f"\n➡️{' '.join(right.text.split())}\n🕐{all_time_two}"
 
 
@@ -85,8 +87,7 @@ def parser_station_n(transport, number_transport, station):
         first_second_way = q.find_all('ul', {"class": "list-group"})
         for q in first_second_way:
             if q.find("a", string=re.compile(station)) == None:
-                cc = 'https://kogda.by/routes/minsk/trolleybus/58/РК%20Бобруйская%20-%20ДС%20Масюковщина/РК%20Бобруйская'
-                print('Такой отановки на этом направлении нет 0')
+                cc = None
             else:
                 hah = q.find("a", string=re.compile(station)).get('href')
                 cc = hah
@@ -94,14 +95,10 @@ def parser_station_n(transport, number_transport, station):
         second_second_way = q.find_all('ul', {"class": "list-group"})
         for q in second_second_way:
             if q.find("a", string=re.compile(station)) == None:
-                cc = 'https://kogda.by/routes/minsk/trolleybus/58/РК%20Бобруйская%20-%20ДС%20Масюковщина/РК%20Бобруйская'
-                print('Такой отановки на этом направлении нет 1')
+                hah_two = None
             else:
                 hah_two = q.find("a", string=re.compile(station)).get('href')
         return parser_time_wait(cc, hah_two, send_left_station, second_right_station, station)
-
-
-
 
 
 def parser_all_station(transport, number_transport):
@@ -113,6 +110,3 @@ def parser_all_station(transport, number_transport):
     firs_all_station = soup.find('ul', {"class": "list-group"}).text
     second_all_station = soup.find('div', {"id": "direction-1"}).text
     return f"⬅️ {' '.join(firs_all_station.split())} \n \n➡️ {' '.join(second_all_station.split())}"
-
-
-
