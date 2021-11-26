@@ -1,6 +1,150 @@
 body {
-        
+
+    overflow: hidden;
+    background: #333; /* Цвет фона */
+}
+
+.up-overlay {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 240%; /* Размер текста */
+    font-weight: lighter; /* Светлое начертание */
+    left: 40%;
+    top: 30%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.gcons {
+    position: absolute;
+    left: 50px;
+    bottom: 45px;
+    z-index: 3000002;
+}
+
+.up-BYN {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 600%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 10%;
+    top: 50%;
+    color: #fff;
+    z-index: 3000002;
+    word-wrap: break-word;
+}
+
+.up-BYN1 {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: lighter; /* Светлое начертание */
+    left: 13%;
+    top: 70%;
+    color: #fff;
+    z-index: 3000002;
+    word-wrap: break-word;
+}
+
+.up-RUB {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 600%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 42%;
+    top: 50%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.up-RUB1 {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: lighter; /* Светлое начертание */
+    left: 50%;
+    top: 70%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.up-USD {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 600%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 80%;
+    top: 50%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.up-USD1 {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: lighter; /* Светлое начертание */
+    left: 83%;
+    top: 70%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.down-overlay {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 250%; /* Размер текста */
+    font-weight: lighter; /* Светлое начертание */
+    left: 45%;
+    top: 80%;
+    color: whitesmoke;
+    z-index: 3000002;
+}
+
+
+.video_overlays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    float: left;
+    width: 200%;
+    min-height: 300%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 300000;
+}
+
+
+.trailer > video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.myButton {
+    position: absolute;
+    background-color: transparent;
+    border-radius: 52px;
+    font-size: 65%;
+    font-weight: lighter;
+    border: 2px solid #fff;
+    color: #fff;
+    font-family: Gill Sans, sans-serif;
+    left: 90%;
+    top: 89%;
+    z-index: 8800000;
+}
+
+@media only screen and (max-width: 1024px) {
+    body {
+
         overflow: hidden;
+        transform: rotate(90deg);
+        transform-origin: bottom left;
+        width: 145vh;
+        height: 100vw;
+        margin-top: -102vw;
         background: #333; /* Цвет фона */
     }
 
@@ -9,108 +153,97 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 240%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 40%;
-        top: 30%;
-        color:#fff;
+        left: 19%;
+        top: 15%;
+        color: #fff;
         z-index: 3000002;
-
-
     }
+
     .gcons {
         position: absolute;
-        left: 50px;
-        bottom: 45px;
+        left: 2%;
+        height: 45%;
         z-index: 3000002;
-
-
     }
+
     .up-BYN {
         position: absolute;
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
-        font-size: 600%; /* Размер текста */
+        font-size: 300%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
         left: 10%;
-        top: 50%;
-        color:#fff;
+        top: 40%;
+        color: #fff;
         z-index: 3000002;
         word-wrap: break-word;
-
-
     }
+
     .up-BYN1 {
         position: absolute;
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 90%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 13%;
-        top: 70%;
-        color:#fff;
+        left: 12%;
+        top: 65%;
+        color: #fff;
         z-index: 3000002;
         word-wrap: break-word;
-
-
     }
+
     .up-RUB {
         position: absolute;
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
-        font-size: 600%; /* Размер текста */
+        font-size: 300%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 42%;
-        top: 50%;
-        color:#fff;
+        left: 33%;
+        top: 40%;
+        color: #fff;
         z-index: 3000002;
-
-
     }
+
     .up-RUB1 {
         position: absolute;
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 90%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 50%;
-        top: 70%;
-        color:#fff;
+        left: 40%;
+        top: 65%;
+        color: #fff;
         z-index: 3000002;
-
-
     }
+
     .up-USD {
         position: absolute;
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
-        font-size: 600%; /* Размер текста */
+        font-size: 300%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 80%;
-        top: 50%;
-        color:#fff;
+        left: 60%;
+        top: 40%;
+        color: #fff;
         z-index: 3000002;
-
-
     }
+
     .up-USD1 {
         position: absolute;
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 90%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 83%;
-        top: 70%;
-        color:#fff;
+        left: 63%;
+        top: 65%;
+        color: #fff;
         z-index: 3000002;
-
-
     }
+
     .down-overlay {
         position: absolute;
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 250%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 45%;
+        left: 35%;
         top: 80%;
         color: whitesmoke;
         z-index: 3000002;
-
-
     }
-
 
     .video_overlays {
         position: absolute;
@@ -123,49 +256,25 @@ body {
         z-index: 300000;
     }
 
-
     .trailer > video {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-
     }
 
     .myButton {
         position: absolute;
-        background-color:transparent;
-        border-radius:52px;
+        background-color: transparent;
+        border-radius: 52px;
         font-size: 65%;
         font-weight: lighter;
-        border:2px solid #fff;
-        color:#fff;
+        border: 2px solid #fff;
+        color: #fff;
         font-family: Gill Sans, sans-serif;
-        left: 90%;
+        left: 700%;
         top: 89%;
         z-index: 8800000;
-
     }
-
-    
-
-    /*style for 404 page*/
-    .error_page_text{
-    position: absolute;
-        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
-        font-size: 50px; /* Размер текста */
-        font-weight: 50; /* Светлое начертание */
-        left: 30%;
-        top: 5%;
-        color:#fff;
-
-    }
-    .error_page{
-        position: absolute;
-        left: 35%;
-        bottom: 10%;
-        width: 70%;
-        height: 70%;
-
-    }
+}
