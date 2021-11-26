@@ -14,14 +14,15 @@ from ugc.models import Message
 from ugc.models import Profile
 from ugc.models import SelectedTransport
 from ugc.models import SelectedStation
-from .parser import  parser_station, parser_all_station, parser_station_n
-
+from .parser import parser_all_station, parser_station_n
 
 client_status_station = {}
 client_status_transport = {}
 
 
 def log_errors(f):
+    """ Функция для отлова ошибок """
+
     def inner(*args, **kwargs):
         try:
             return f(*args, **kwargs)
@@ -35,6 +36,7 @@ def log_errors(f):
 
 @log_errors
 def do_allstation(update: Update, context: CallbackContext):
+    """Функция вывода всех остановок избранного транспорта, с проверкой на их существование """
     chat_id = update.message.chat_id
 
     p, _ = Profile.objects.get_or_create(
@@ -45,7 +47,7 @@ def do_allstation(update: Update, context: CallbackContext):
     )
     if SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 0:
         update.message.reply_text(
-            text='У вас нет transport'
+            text='❌ Вы еще не добавили не одного транспорта ❌'
         )
     elif SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 1:
         take_data_transport = SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True)
@@ -71,6 +73,7 @@ def do_allstation(update: Update, context: CallbackContext):
 
 @log_errors
 def do_live_station(update: Update, context: CallbackContext):
+    """ Функция вывода времени ожидания избранных остановок в 2-ух направлениях """
     chat_id = update.message.chat_id
 
     p, _ = Profile.objects.get_or_create(
@@ -81,7 +84,7 @@ def do_live_station(update: Update, context: CallbackContext):
     )
     if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 0:
         update.message.reply_text(
-            text='У вас нет station'
+            text='❌ Вы еще не добавили остановок ❌'
         )
     elif SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 1:
         take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
@@ -109,6 +112,7 @@ def do_live_station(update: Update, context: CallbackContext):
 
 @log_errors
 def do_add_station(update: Update, context: CallbackContext):
+    """ Записывает в словарь значение о том, что пользователь собрался добавить остановку """
     chat_id = update.message.chat_id
 
     p, _ = Profile.objects.get_or_create(
@@ -130,6 +134,7 @@ def do_add_station(update: Update, context: CallbackContext):
 
 @log_errors
 def do_add_transport(update: Update, context: CallbackContext):
+    """ Записывает в словарь значение о том, что пользователь собрался добавить транспорт """
     chat_id = update.message.chat_id
 
     p, _ = Profile.objects.get_or_create(
@@ -153,6 +158,7 @@ def do_add_transport(update: Update, context: CallbackContext):
 
 @log_errors
 def do_dell_transport(update: Update, context: CallbackContext):
+    """ Функция удаляет !!Пока что!! весь транспорт из БД человека"""
     chat_id = update.message.chat_id
 
     p, _ = Profile.objects.get_or_create(
@@ -163,7 +169,7 @@ def do_dell_transport(update: Update, context: CallbackContext):
     )
     if SelectedTransport.objects.filter(profile=p).values_list('transport', flat=True).count() == 0:
         update.message.reply_text(
-            text=f'❌ У Вас нет транспорта❌'
+            text=f'❌ У Вас нет транспорта ❌'
         )
     else:
         tran = SelectedTransport.objects.filter(profile=p).delete()
@@ -174,6 +180,7 @@ def do_dell_transport(update: Update, context: CallbackContext):
 
 @log_errors
 def do_dell_station(update: Update, context: CallbackContext):
+    """ Функция удаляет !!Пока что!! все остановки из БД человека"""
     chat_id = update.message.chat_id
 
     p, _ = Profile.objects.get_or_create(
@@ -184,7 +191,7 @@ def do_dell_station(update: Update, context: CallbackContext):
     )
     if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 0:
         update.message.reply_text(
-            text=f'❌ У Вас нет остановок❌'
+            text=f'❌ У Вас нет остановок ❌'
         )
     else:
         tran = SelectedStation.objects.filter(profile=p).delete()
@@ -195,6 +202,11 @@ def do_dell_station(update: Update, context: CallbackContext):
 
 @log_errors
 def do_echo_add(update: Update, context: CallbackContext):
+    """ Функция которая реагирует на сообщения, но если в словаре есть значения на запис, то будет сохранять в БД инфу
+    Если человек собрался добавить Остановку , то в словаре будет  -  wait_for_data_station и после ввода добавит остановку
+    Если человек собрался добавить Транспорт , то в словаре будет  -  wait_for_data_transport и после ввода добавит транспорт
+    Просто если ввел 2 слова, то среагирует показ всех остановок, а если 3 , то время ожидания транспорта с отсановки
+    """
     try:
         chat_id = update.message.chat_id
         text = update.message.text
@@ -256,6 +268,7 @@ def do_echo_add(update: Update, context: CallbackContext):
 
 @log_errors
 def do_help(update: Update, context: CallbackContext):
+    """ Выводит информацию по боту"""
     chat_id = update.message.chat_id
     text = update.message.text
     # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
@@ -267,16 +280,16 @@ def do_help(update: Update, context: CallbackContext):
     )
     update.message.reply_text(
         text=
-        f'\n/all - показать все остановки избранного транспорта'
-        f'\n/live - показать время отправления с избранного транспорта'
-        f'\n/sadd - добавить остановку в избранные(не более 2-ух)'
-        f'\n/tadd - добавить транспорт в избранные(не более 2-ух)'
-        f'\n/tdell - удалить весь транспорт'
-        f'\n/sdell - удалить все остановки'
-        f'\nЧтобы узнать направления автобуса, введи название транспорта и номер'
-        f'\nПример: автобус 69'
-        f'\nЧтобы узнать время до автобуса, введи название транспорта, номер и остановку'
-        f'\nПример: автобус 69 2-е кольцо',
+        f'\nЕсли введешь:'
+        f'\n➡️ вид интересующего тебя транспорта и его номер - откроется полный список остановок на его маршруте'
+        f'\n➡️ вид транспорта, его номер и название остановки - увидишь время отправления транспорта'
+        f'\n➡️ /tadd - добавишь последний искомый транспорт в избранные (не более 2-х)'
+        f'\n➡️ /sadd - добавишь последнюю искомую остановку в избранные (не более 2-х)'
+        f'\n➡️ /all - получишь все остановки избранного транспорта'
+        f'\n➡️ /live - узнаешь время отправления избранного транспорта с избранной остановки'
+        f'\n➡️ /tdell - удалишь весь избранный транспорт'
+        f'\n➡️ /sdell - удалишь все избранные остановки'
+        f'\nУдачи и в путь!😊'
     )
     Message(
         profile=p,
@@ -286,6 +299,7 @@ def do_help(update: Update, context: CallbackContext):
 
 @log_errors
 def do_start(update: Update, context: CallbackContext):
+    """ Стартует бота """
     chat_id = update.message.chat_id
     text = update.message.text
     # _ - булевый флаг, кот означает профиль создан только что или нет! p - объект профиля, кот взят из базы
@@ -296,7 +310,7 @@ def do_start(update: Update, context: CallbackContext):
         }
     )
     update.message.reply_text(
-        text=f'Привет, для начала предлагаю тебе ознакомиться с командами бота\n /help',
+        text=f'Привет! Давай я помогу тебе поскорее добраться до точки назначения🔜 /help',
     )
     Message(
         profile=p,
@@ -308,6 +322,7 @@ class Command(BaseCommand):
     help = 'Телеграм-Бот'
 
     def handle(self, *args, **options):
+        """ Подключение бота"""
         request = Request(
             connect_timeout=0.5,
             read_timeout=1.0,
@@ -323,7 +338,6 @@ class Command(BaseCommand):
             bot=bot,
             use_context=True,
         )
-
 
         message_handler2 = CommandHandler('all', do_allstation)
         updater.dispatcher.add_handler(message_handler2)

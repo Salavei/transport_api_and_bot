@@ -15,11 +15,11 @@ def parser_time_wait(hah, hah_two, left, right, station):
         soup = BeautifulSoup(html, 'lxml')
         take_for_was_and_now = soup.find_all('div', {"class": "content-block-desktop"})
         take_for_will_be = soup.find_all('span', {"class": "future"})
-        for q in take_for_was_and_now:
-            soup2 = BeautifulSoup(str(q), 'lxml')
+        for z in take_for_was_and_now:
+            soup2 = BeautifulSoup(str(z), 'lxml')
             now = soup2.find('span', {"class": "future"})
-        for q in take_for_will_be:
-            soup2 = BeautifulSoup(str(q), 'lxml')
+        for x in take_for_will_be:
+            soup2 = BeautifulSoup(str(x), 'lxml')
             will_be = soup2.find('span')
             all_time = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
     if hah_two == None:
@@ -33,11 +33,11 @@ def parser_time_wait(hah, hah_two, left, right, station):
         soup_two = BeautifulSoup(html_two, 'lxml')
         take_for_was_and_now_two = soup_two.find_all('div', {"class": "content-block-desktop"})
         take_for_will_be_two = soup_two.find_all('span', {"class": "future"})
-        for q in take_for_was_and_now_two:
-            soup2 = BeautifulSoup(str(q), 'lxml')
+        for n in take_for_was_and_now_two:
+            soup2 = BeautifulSoup(str(n), 'lxml')
             now = soup2.find('span', {"class": "future"})
-        for q in take_for_will_be_two:
-            soup2 = BeautifulSoup(str(q), 'lxml')
+        for v in take_for_will_be_two:
+            soup2 = BeautifulSoup(str(v), 'lxml')
             will_be = soup2.find('span')
             all_time_two = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
     return f"⬅️{' '.join(left.text.split())}\n🕐{all_time} \n", f"\n➡️{' '.join(right.text.split())}\n🕐{all_time_two}"
@@ -76,28 +76,28 @@ def parser_station_n(transport, number_transport, station):
     for q in left:
         soup2 = BeautifulSoup(str(q), 'lxml')
         send_left_station = soup2.find('a').contents[0]
-    for q in right:
-        soup2 = BeautifulSoup(str(q), 'lxml')
+    for d in right:
+        soup2 = BeautifulSoup(str(d), 'lxml')
         second_right_station = soup2.find('a').contents[0]
 
     first_way = soup.find_all('div', {"id": "direction-0"})
     second_way = soup.find_all('div', {"id": "direction-1"})
 
-    for q in first_way:
-        first_second_way = q.find_all('ul', {"class": "list-group"})
-        for q in first_second_way:
-            if q.find("a", string=re.compile(station)) == None:
+    for j in first_way:
+        first_second_way = j.find_all('ul', {"class": "list-group"})
+        for i in first_second_way:
+            if i.find("a", string=re.compile(station)) == None:
                 cc = None
             else:
-                hah = q.find("a", string=re.compile(station)).get('href')
+                hah = i.find("a", string=re.compile(station)).get('href')
                 cc = hah
-    for q in second_way:
-        second_second_way = q.find_all('ul', {"class": "list-group"})
-        for q in second_second_way:
-            if q.find("a", string=re.compile(station)) == None:
+    for m in second_way:
+        second_second_way = m.find_all('ul', {"class": "list-group"})
+        for e in second_second_way:
+            if e.find("a", string=re.compile(station)) == None:
                 hah_two = None
             else:
-                hah_two = q.find("a", string=re.compile(station)).get('href')
+                hah_two = e.find("a", string=re.compile(station)).get('href')
         return parser_time_wait(cc, hah_two, send_left_station, second_right_station, station)
 
 
