@@ -22,6 +22,7 @@ def parser_time_wait(hah, hah_two, left, right, station):
             soup2 = BeautifulSoup(str(x), 'lxml')
             will_be = soup2.find('span')
             all_time = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
+
     if hah_two == None:
         all_time_two = ' ❗️Такой отановки в этом направлении не существует❗️'
     else:
@@ -44,10 +45,11 @@ def parser_time_wait(hah, hah_two, left, right, station):
 
 
 def parser_station(transport):
-    bus = ['автобус', 'АВТОБУС', 'autobus', 'автик', 'овтобус']
-    trum = ['Трамвай', 'трам', 'ТРАМВАЙ', 'tram', 'тромвай']
-    trami = ['Троллейбус', 'тралеуйбус', 'тралик', 'trolleybus', 'троллейбус']
-    metr = ['метро', 'МЕТРО', 'Метро', 'metro']
+    bus = ['автобус', 'АВТОБУС', 'autobus', 'автик', 'овтобус', 'АВТОБУС', 'Autobus', 'Автик', 'Автобус']
+    trum = ['Трамвай', 'трам', 'ТРАМВАЙ', 'tram', 'тромвай', 'трамвай', 'Трам', 'ТРАМВАЙ', 'Tram', 'Тромвай']
+    trami = ['Троллейбус', 'тралеуйбус', 'тралик', 'trolleybus', 'троллейбус', 'троллейбус', 'Тралеуйбус', 'Тралик',
+             'Trolleybus', 'Троллейбус']
+    metr = ['метро', 'МЕТРО', 'Метро', 'metro', 'Метро', 'МЕТРО', 'метро', 'Metro']
     if transport in bus:
         transport = 'autobus'
     elif transport in trami:
