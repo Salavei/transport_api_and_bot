@@ -16,7 +16,8 @@ from ugc.models import SelectedTransport
 from ugc.models import SelectedStation
 from .parser import parser_all_station, parser_station_n
 
-import os
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+
 import logging
 
 logging.basicConfig(filename='app.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -357,13 +358,20 @@ def do_start(update: Update, context: CallbackContext):
         }
     )
     update.message.reply_text(
-        text=f'Привет! Давай я помогу тебе поскорее добраться до точки назначения🔜 /help',
+        text=f'Привет! Давай я помогу тебе поскорее добраться до точки назначения🔜 /help', reply_markup=markup
     )
     Message(
         profile=p,
         text=text,
     ).save()
 
+reply_keyboard = [['/tadd', '/sadd'],
+                  ['/all', '/live'],
+                  ['/tdell', '/sdell']]
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+
+def close_keyboard(update: Update, context: CallbackContext):
+    update.message.reply_text('Ok', reply_markup=ReplyKeyboardRemove())
 
 class Command(BaseCommand):
     help = 'Телеграм-Бот'
@@ -386,6 +394,8 @@ class Command(BaseCommand):
             bot=bot,
             use_context=True,
         )
+
+
 
         message_handler2 = CommandHandler('all', do_allstation)
         updater.dispatcher.add_handler(message_handler2)
@@ -416,6 +426,7 @@ class Command(BaseCommand):
 
         message_handler = MessageHandler(Filters.text, do_echo_add)
         updater.dispatcher.add_handler(message_handler)
+
 
         # 3 -- обработчик
         updater.start_polling()
