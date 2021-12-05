@@ -62,7 +62,7 @@ body {
     font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
     font-size: 90%; /* Размер текста */
     font-weight: lighter; /* Светлое начертание */
-    left: 50%;
+    left: 49%;
     top: 70%;
     color: #fff;
     z-index: 3000002;
@@ -84,7 +84,7 @@ body {
     font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
     font-size: 90%; /* Размер текста */
     font-weight: lighter; /* Светлое начертание */
-    left: 83%;
+    left: 84%;
     top: 70%;
     color: #fff;
     z-index: 3000002;
@@ -101,7 +101,104 @@ body {
     z-index: 3000002;
 }
 
+.about_conversion {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 110%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 10%;
+    top: 5%;
+    color: #fff;
+    z-index: 3000002;
+}
 
+.conversion_uah {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 55%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.conversion_byn {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 63%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.conversion_rub {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 70.5%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.conversion_usd {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 78%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.about_conversion_ua {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 51%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.about_conversion_by {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 59%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.about_conversion_ru {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 67%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
+
+.about_conversion_usa {
+    position: absolute;
+    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+    font-size: 90%; /* Размер текста */
+    font-weight: 500; /* Светлое начертание */
+    left: 75%;
+    top: 5.5%;
+    color: #fff;
+    z-index: 3000002;
+}
 .video_overlays {
     position: absolute;
     top: 0;
@@ -153,7 +250,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 240%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 19%;
+        left: 27%;
         top: 15%;
         color: #fff;
         z-index: 3000002;
@@ -183,7 +280,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 90%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 12%;
+        left: 11.5%;
         top: 65%;
         color: #fff;
         z-index: 3000002;
@@ -206,7 +303,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 90%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 40%;
+        left: 37%;
         top: 65%;
         color: #fff;
         z-index: 3000002;
@@ -228,7 +325,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 90%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 63%;
+        left: 61.5%;
         top: 65%;
         color: #fff;
         z-index: 3000002;
@@ -239,7 +336,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 250%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 35%;
+        left: 34%;
         top: 80%;
         color: whitesmoke;
         z-index: 3000002;
@@ -276,5 +373,103 @@ body {
         left: 700%;
         top: 89%;
         z-index: 8800000;
+    }
+    .about_conversion {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 60%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 3%;
+        top: 5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .conversion_uah {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 45%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .conversion_byn {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 52.5%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .conversion_rub {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 59%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .conversion_usd {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 65%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .about_conversion_ua {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 41%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .about_conversion_by {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 48%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .about_conversion_ru {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 55.5%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
+    }
+
+    .about_conversion_usa {
+        position: absolute;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-size: 50%; /* Размер текста */
+        font-weight: 500; /* Светлое начертание */
+        left: 62%;
+        top: 5.5%;
+        color: #fff;
+        z-index: 3000002;
     }
 }
