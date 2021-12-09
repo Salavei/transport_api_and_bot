@@ -17,7 +17,7 @@ from ugc.models import SelectedStation
 from .parser import parser_all_station, parser_station_n
 
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
-
+import os
 import logging
 
 logging.basicConfig(filename='app.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -52,7 +52,8 @@ def do_send_log(update: Update, context: CallbackContext):
             'name': update.message.from_user.username,
         }
     )
-    with open("/Users/andrewsalavei/PycharmProjects/pythonProject1/tga/app.log", "r") as file:
+    read_file_log = os.path.join('app.log')
+    with open(read_file_log, 'r') as file:
         context.bot.send_document(chat_id=815021893, document=file,
                                   filename='tg_error_log.txt')
 
@@ -112,24 +113,27 @@ def do_live_station(update: Update, context: CallbackContext):
     elif SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 1:
         take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
         station_one = [x for x in str(take_data_station[0]).split()]
-        give_station_in_func_one = parser_station_n(station_one[0], station_one[1], station_one[2][0].upper()+station_one[2][1:])
+        give_station_in_func_one = parser_station_n(station_one[0], station_one[1],
+                                                    station_one[2][0].upper() + station_one[2][1:])
         # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
         update.message.reply_text(
-            text=f'✨ {station_one[0].upper()} 🚍 {station_one[1]}\n✨ Остановка 🚏: {station_one[2][0].upper()+station_one[2][1:]}'
-                 f'\n{f"{give_station_in_func_one[0]}{give_station_in_func_one[1]}"}')
+            text=f'✨ {station_one[0].upper()} 🚍 {station_one[1]}\n✨ Остановка 🚏: {station_one[2][0].upper() + station_one[2][1:]}'
+                 f'\n{f"{give_station_in_func_one[0]}{give_station_in_func_one[1]}"}\n\n🚯Оставляйте, пожалуйста, талоны другим людям♥️')
     else:
         take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
         station_one = [x for x in str(take_data_station[0]).split()]
         station_two = [x for x in str(take_data_station[1]).split()]
-        give_station_in_func_one = parser_station_n(station_one[0], station_one[1], station_one[2][0].upper()+station_one[2][1:])
-        give_station_in_func_two = parser_station_n(station_two[0], station_two[1], station_two[2][0].upper()+station_two[2][1:])
+        give_station_in_func_one = parser_station_n(station_one[0], station_one[1],
+                                                    station_one[2][0].upper() + station_one[2][1:])
+        give_station_in_func_two = parser_station_n(station_two[0], station_two[1],
+                                                    station_two[2][0].upper() + station_two[2][1:])
         # # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
         update.message.reply_text(
-            text=f'✨ {station_one[0].upper()} 🚍 {station_one[1]}\n✨ Остановка 🚏: {station_one[2][0].upper()+station_one[2][1:]}'
+            text=f'✨ {station_one[0].upper()} 🚍 {station_one[1]}\n✨ Остановка 🚏: {station_one[2][0].upper() + station_one[2][1:]}'
                  f'\n{f"{give_station_in_func_one[0]}{give_station_in_func_one[1]}"}\n')
         update.message.reply_text(
-            text=f'✨ {station_two[0].upper()} 🚍 {station_two[1]}\n✨ Остановка 🚏: {station_two[2][0].upper()+station_two[2][1:]}'
-                 f'\n{f"{give_station_in_func_two[0]}{give_station_in_func_two[1]}"}',
+            text=f'✨ {station_two[0].upper()} 🚍 {station_two[1]}\n✨ Остановка 🚏: {station_two[2][0].upper() + station_two[2][1:]}'
+                 f'\n{f"{give_station_in_func_two[0]}{give_station_in_func_two[1]}"}\n\n🚯Оставляйте, пожалуйста, талоны другим людям♥️',
         )
 
 
@@ -154,7 +158,6 @@ def do_add_station(update: Update, context: CallbackContext):
             text=f'🛠Добавить избранную остановку(Автобус 100 Козлова)\n☝️ВАЖНО: если остановка начинается что-то вроде'
                  f' Площадь / Станция и т.д, \n❗️писать нужно само название - Немига, Якуба, Победы❗:'
         )
-
 
 
 @log_errors
@@ -237,7 +240,6 @@ def do_dell_station(update: Update, context: CallbackContext):
         SelectedStation.objects.filter(profile=p)[1].delete()
 
 
-
 @log_errors
 def do_echo_add(update: Update, context: CallbackContext):
     """ Функция которая реагирует на сообщения, но если в словаре есть значения на запис, то будет сохранять в БД инфу
@@ -294,7 +296,9 @@ def do_echo_add(update: Update, context: CallbackContext):
                     hand_trans_data = parser_station_n(hand_add_st[0], hand_add_st[1],
                                                        hand_add_st[2][0].upper() + hand_add_st[2][1:])
                     update.message.reply_text(
-                        text=f'✨ {hand_add_st[0].upper()} 🚍 {hand_add_st[1]}\n✨ Остановка 🚏: \n{hand_add_st[2][0].upper()}{hand_add_st[2][1:]}\n{f"{hand_trans_data[0]} {hand_trans_data[1]}"}\n'
+                        text=f'✨ {hand_add_st[0].upper()} 🚍 {hand_add_st[1]}\n✨ Остановка 🚏: \n{hand_add_st[2][0].upper()}'
+                             f'{hand_add_st[2][1:]}\n{f"{hand_trans_data[0]} {hand_trans_data[1]}"}\n'
+                             f'\n🚯Оставляйте, пожалуйста, талоны другим людям♥️'
                     )
             Message(
                 profile=p,
@@ -335,8 +339,8 @@ def do_help(update: Update, context: CallbackContext):
         f'\n➡️ /sadd - добавишь далее введённую остановку в избранные (не более 2-х)'
         f'\n➡️ /all - получишь все остановки избранного транспорта'
         f'\n➡️ /live - узнаешь время отправления избранного транспорта с избранной остановки'
-        f'\n➡️ /tdell - удалишь весь избранный транспорт'
-        f'\n➡️ /sdell - удалишь все избранные остановки'
+        f'\n➡️ /tdell - удалишь избранный транспорт'
+        f'\n➡️ /sdell - удалишь избранную остановку'
         f'\nУдачи и в путь!😊'
     )
     Message(
@@ -365,13 +369,16 @@ def do_start(update: Update, context: CallbackContext):
         text=text,
     ).save()
 
+
 reply_keyboard = [['/tadd', '/sadd'],
                   ['/all', '/live'],
                   ['/tdell', '/sdell']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
+
 def close_keyboard(update: Update, context: CallbackContext):
     update.message.reply_text('Ok', reply_markup=ReplyKeyboardRemove())
+
 
 class Command(BaseCommand):
     help = 'Телеграм-Бот'
@@ -394,8 +401,6 @@ class Command(BaseCommand):
             bot=bot,
             use_context=True,
         )
-
-
 
         message_handler2 = CommandHandler('all', do_allstation)
         updater.dispatcher.add_handler(message_handler2)
@@ -426,7 +431,6 @@ class Command(BaseCommand):
 
         message_handler = MessageHandler(Filters.text, do_echo_add)
         updater.dispatcher.add_handler(message_handler)
-
 
         # 3 -- обработчик
         updater.start_polling()
