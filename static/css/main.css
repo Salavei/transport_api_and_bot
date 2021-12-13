@@ -250,8 +250,8 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 240%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 27%;
-        top: 15%;
+        left: 16%;
+        top: 19%;
         color: #fff;
         z-index: 3000002;
     }
@@ -325,7 +325,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 90%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 61.5%;
+        left: 62.5%;
         top: 65%;
         color: #fff;
         z-index: 3000002;
@@ -336,7 +336,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 250%; /* Размер текста */
         font-weight: lighter; /* Светлое начертание */
-        left: 34%;
+        left: 30%;
         top: 80%;
         color: whitesmoke;
         z-index: 3000002;
@@ -365,12 +365,12 @@ body {
         position: absolute;
         background-color: transparent;
         border-radius: 52px;
-        font-size: 65%;
+        font-size: 45%;
         font-weight: lighter;
         border: 2px solid #fff;
         color: #fff;
         font-family: Gill Sans, sans-serif;
-        left: 700%;
+        left: 65%;
         top: 89%;
         z-index: 8800000;
     }
@@ -379,8 +379,8 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 60%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 3%;
-        top: 5%;
+        left: 17%;
+        top: 1%;
         color: #fff;
         z-index: 3000002;
     }
@@ -390,7 +390,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 45%;
+        left: 25%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
@@ -401,7 +401,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 52.5%;
+        left: 32.5%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
@@ -412,7 +412,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 59%;
+        left: 39%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
@@ -423,7 +423,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 65%;
+        left: 45%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
@@ -434,7 +434,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 41%;
+        left: 21%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
@@ -445,7 +445,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 48%;
+        left: 28%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
@@ -456,7 +456,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 55.5%;
+        left: 35.5%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
@@ -467,7 +467,7 @@ body {
         font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
         font-size: 50%; /* Размер текста */
         font-weight: 500; /* Светлое начертание */
-        left: 62%;
+        left: 42%;
         top: 5.5%;
         color: #fff;
         z-index: 3000002;
