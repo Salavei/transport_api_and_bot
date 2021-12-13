@@ -260,11 +260,24 @@ def do_echo_add(update: Update, context: CallbackContext):
             )
             station_o = [x for x in text.split()]
             if chat_id in client_status_station and client_status_station[
-                chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
-                                                                                                              flat=True).count() < 2 and \
-                    parser_station_n(station_o[0], station_o[1],
-                                     station_o[2][0].upper() + station_o[2][1:])[0].find("❗️") != -1 and parser_station_n(station_o[0], station_o[1],
-                                     station_o[2][0].upper() + station_o[2][1:])[1].find("❗️") != -1 :
+                chat_id] == 'wait_for_data_station' and (parser_station_n(station_o[0], station_o[1],
+                                                                          station_o[2][0].upper() + station_o[
+                                                                              2]) == None) and SelectedStation.objects.filter(
+                profile=p).values_list('station',
+                                       flat=True).count() < 2:
+                del client_status_station[chat_id]
+                update.message.reply_text(
+                    text=f'❗ Маршрут не сохранен. Проверьте корректность названия остановки ❗'
+                )
+            elif chat_id in client_status_station and client_status_station[
+                chat_id] == 'wait_for_data_station' and (parser_station_n(station_o[0], station_o[1],
+                                                                          station_o[2][0].upper() + station_o[2][1:])[
+                                                             0].find("❗️") != -1 and
+                                                         parser_station_n(station_o[0], station_o[1],
+                                                                          station_o[2][0].upper() + station_o[2][1:])[
+                                                             1].find("❗️") != -1) and SelectedStation.objects.filter(
+                profile=p).values_list('station',
+                                       flat=True).count() < 2:
                 del client_status_station[chat_id]
                 update.message.reply_text(
                     text=f'❗ Маршрут не сохранен. Проверьте корректность названия остановки ❗'
@@ -280,9 +293,41 @@ def do_echo_add(update: Update, context: CallbackContext):
                     text=f'✨ Маршрут от остановки 🚏: {station_one[2]} добавлен ✅'
                 )
             # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+            elif chat_id in client_status_transport and len(station_o) != 2 and client_status_transport[
 
+                chat_id] == 'wait_for_data_transport' and parser_all_station(station_o[0],
+                                                                             station_o[
+                                                                                 1]) == None and SelectedTransport.objects.filter(
+                profile=p).values_list(
+                'transport',
+                flat=True).count() < 2:
+                del client_status_transport[chat_id]
+                # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+
+                update.message.reply_text(
+
+                    text=f'❗ Транспорт не сохранен. Проверьте корректность написания ❗'
+
+                )
+            elif chat_id in client_status_transport and len(station_o) != 2 and client_status_transport[
+
+                chat_id] == 'wait_for_data_transport' and parser_all_station(station_o[0],
+                                                                             station_o[1]) == None and text[
+                                                                                                       -1:].isdigit() == False and SelectedTransport.objects.filter(
+                profile=p).values_list(
+                'transport',
+                flat=True).count() < 2:
+                del client_status_transport[chat_id]
+                # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+                update.message.reply_text(
+
+                    text=f'❗ Транспорт не сохранен. Проверьте корректность написания ❗'
+
+                )
             elif chat_id in client_status_transport and client_status_transport[
-                chat_id] == 'wait_for_data_transport' and text[-1:].isdigit() == True and SelectedTransport.objects.filter(profile=p).values_list(
+                chat_id] == 'wait_for_data_transport' and text[
+                                                          -1:].isdigit() == True and SelectedTransport.objects.filter(
+                profile=p).values_list(
                 'transport',
                 flat=True).count() < 2:
                 add_data_transport = SelectedTransport.objects.create(profile=p, transport=text)
@@ -292,19 +337,6 @@ def do_echo_add(update: Update, context: CallbackContext):
                 update.message.reply_text(
                     text=f'✨ Транспорт 🚍: {add_data_transport} добавлен ✅'
                 )
-
-
-            elif chat_id in client_status_transport and client_status_transport[
-                chat_id] == 'wait_for_data_transport' and text[-1:].isdigit() == False and SelectedTransport.objects.filter(profile=p).values_list(
-                'transport',
-                flat=True).count() < 2:
-                del client_status_transport[chat_id]
-                # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-                update.message.reply_text(
-                    text=f'❗ Транспорт не сохранен. Проверьте корректность написания ❗'
-                )
-
-
             else:
                 hand_add_st = [x for x in text.split(' ')]
                 if len(hand_add_st) == 2:
@@ -312,18 +344,32 @@ def do_echo_add(update: Update, context: CallbackContext):
                     # update.message.reply_text(
                     #     text=f'✨ Направления {hand_add_st[1]} {hand_add_st[0].upper()} 🚍 : \n{hand_trans_data}',
                     # )
-                    hand_trans_data = parser_all_station(hand_add_st[0], hand_add_st[1])
-                    update.message.reply_text(
-                        text=f'✨ Все остановки🚏 {hand_add_st[0].upper()} 🚍: {hand_add_st[1]}\n {hand_trans_data}',
-                    )
+                    if parser_all_station(hand_add_st[0], hand_add_st[1]) != None:
+                        hand_trans_data = parser_all_station(hand_add_st[0], hand_add_st[1])
+                        update.message.reply_text(
+                            text=f'✨ Все остановки🚏 {hand_add_st[0].upper()} 🚍: {hand_add_st[1]}\n {hand_trans_data}',
+                        )
+                    else:
+                        update.message.reply_text(
+
+                            text=f'❌ Я Вас не понимаю. Введите /help чтобы узнать как я работаю ❌'
+
+                        )
                 else:
-                    hand_trans_data = parser_station_n(hand_add_st[0], hand_add_st[1],
-                                                       hand_add_st[2][0].upper() + hand_add_st[2][1:])
-                    update.message.reply_text(
-                        text=f'✨ {hand_add_st[0].upper()} 🚍 {hand_add_st[1]}\n✨ Остановка 🚏: \n{hand_add_st[2][0].upper()}'
-                             f'{hand_add_st[2][1:]}\n{f"{hand_trans_data[0]} {hand_trans_data[1]}"}\n'
-                             f'\n🚯Оставляйте, пожалуйста, талоны другим людям♥️'
-                    )
+                    if parser_station_n(hand_add_st[0], hand_add_st[1], hand_add_st[2][0].upper() + hand_add_st[2][1:]) == None:
+                        update.message.reply_text(
+
+                            text=f'❌ Я Вас не понимаю. Введите /help чтобы узнать как я работаю ❌'
+
+                        )
+                    else:
+                        hand_trans_data = parser_station_n(hand_add_st[0], hand_add_st[1],
+                                                           hand_add_st[2][0].upper() + hand_add_st[2][1:])
+                        update.message.reply_text(
+                            text=f'✨ {hand_add_st[0].upper()} 🚍 {hand_add_st[1]}\n✨ Остановка 🚏: \n{hand_add_st[2][0].upper()}'
+                                 f'{hand_add_st[2][1:]}\n{f"{hand_trans_data[0]} {hand_trans_data[1]}"}\n'
+                                 f'\n🚯Оставляйте, пожалуйста, талоны другим людям♥️'
+                        )
             Message(
                 profile=p,
                 text=text,

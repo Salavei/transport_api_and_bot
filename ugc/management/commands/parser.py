@@ -59,7 +59,7 @@ def parser_station(transport):
     elif transport in metr:
         transport = 'metro'
     else:
-        print('транспорта не существует')
+        breakscript = 0
     return transport
 
 
@@ -104,11 +104,14 @@ def parser_station_n(transport, number_transport, station):
 
 
 def parser_all_station(transport, number_transport):
-    transport = parser_station(transport)
-    url = f'https://kogda.by/routes/minsk/{transport}/{number_transport}'
-    r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-    html = r.text
-    soup = BeautifulSoup(html, 'lxml')
-    firs_all_station = soup.find('ul', {"class": "list-group"}).text
-    second_all_station = soup.find('div', {"id": "direction-1"}).text
-    return f"⬅️ {' '.join(firs_all_station.split())} \n \n➡️ {' '.join(second_all_station.split())}"
+    try:
+        transport = parser_station(transport)
+        url = f'https://kogda.by/routes/minsk/{transport}/{number_transport}'
+        r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        html = r.text
+        soup = BeautifulSoup(html, 'lxml')
+        firs_all_station = soup.find('ul', {"class": "list-group"}).text
+        second_all_station = soup.find('div', {"id": "direction-1"}).text
+        return f"⬅️ {' '.join(firs_all_station.split())} \n \n➡️ {' '.join(second_all_station.split())}"
+    except AttributeError:
+        return None
