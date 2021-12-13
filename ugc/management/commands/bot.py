@@ -108,7 +108,7 @@ def do_live_station(update: Update, context: CallbackContext):
     )
     if SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 0:
         update.message.reply_text(
-            text='❌ Вы еще не добавили остановок ❌'
+            text='❌ Вы еще не добавили остановку ❌'
         )
     elif SelectedStation.objects.filter(profile=p).values_list('station', flat=True).count() == 1:
         take_data_station = SelectedStation.objects.filter(profile=p).values_list('station', flat=True)
@@ -258,13 +258,23 @@ def do_echo_add(update: Update, context: CallbackContext):
                     'name': update.message.from_user.username,
                 }
             )
+            station_one = [x for x in text.split()]
+            check_station_to_save = parser_station_n(station_one[0], station_one[1],
+                                                     station_one[2][0].upper() + station_one[2][1:])
             if chat_id in client_status_station and client_status_station[
+                chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
+                                                                                                              flat=True).count() < 2 and \
+                    check_station_to_save[0].find("❗️") != -1 and check_station_to_save[1].find("❗️") != -1:
+                del client_status_station[chat_id]
+                update.message.reply_text(
+                    text=f'❗ Маршрут не сохранен. Проверьте корректность названия остановки ❗'
+                )
+            elif chat_id in client_status_station and client_status_station[
                 chat_id] == 'wait_for_data_station' and SelectedStation.objects.filter(profile=p).values_list('station',
                                                                                                               flat=True).count() < 2:
                 add_data_station = SelectedStation.objects.create(profile=p, station=text)
                 add_data_station.save
                 del client_status_station[chat_id]
-                station_one = [x for x in text.split()]
                 update.message.reply_text(
                     text=f'✨ Маршрут от остановки 🚏: {station_one[2]} добавлен ✅'
                 )
