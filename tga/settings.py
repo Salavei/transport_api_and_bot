@@ -20,13 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ' '
+SECRET_KEY = 'django-insecure-j4ghtsx2@wdykhtozi)qxchyd4x23#t8!7wumdx*n*fn%p5(g%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
+# ALLOWED_HOSTS = [
+#     # '185.231.154.71',
+#     # '127.0.0.1:8000',
+#     'localhost',
+# ]
 
 
 # Application definition
@@ -137,6 +141,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #setting's bot
 
-TOKEN = ' '
+TOKEN = '2114179429:AAGxSBcMwbFzxmPtYTtyIzmykrnkSCYhbqk'
 
 # PROXY_URL = 'https://telegg.ru/orig/bot'

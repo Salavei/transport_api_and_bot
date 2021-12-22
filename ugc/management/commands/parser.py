@@ -115,3 +115,12 @@ def parser_all_station(transport, number_transport):
         return f"⬅️ {' '.join(firs_all_station.split())} \n \n➡️ {' '.join(second_all_station.split())}"
     except AttributeError:
         return None
+
+
+def parser_about_station(name_station):
+    url = f'https://kogda.by/stops/minsk/{name_station}'
+    r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    html = r.text
+    soup = BeautifulSoup(html, 'lxml')
+    give_information_about_station = soup.find('div', {"class": "filters"}).text
+    return give_information_about_station.split()

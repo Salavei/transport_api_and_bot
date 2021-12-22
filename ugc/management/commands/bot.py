@@ -14,22 +14,28 @@ from ugc.models import Message
 from ugc.models import Profile
 from ugc.models import SelectedTransport
 from ugc.models import SelectedStation
-from .parser import parser_all_station, parser_station_n
+from .parser import parser_all_station, parser_station_n, parser_about_station
 
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 import os
 import logging
+
+# возвращает документацию
+from functools import wraps
+
 
 logging.basicConfig(filename='app.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logging.warning('This will get logged to a file')
 
 client_status_station = {}
 client_status_transport = {}
+client_status_about_station = {}
 
 
 def log_errors(f):
     """ Функция для отлова ошибок """
 
+    @wraps(f)
     def inner(*args, **kwargs):
         try:
             return f(*args, **kwargs)
@@ -43,7 +49,7 @@ def log_errors(f):
 
 @log_errors
 def do_send_log(update: Update, context: CallbackContext):
-    """Функция вывода всех остановок избранного транспорта, с проверкой на их существование """
+    """Функция вывода логов """
     chat_id = update.message.chat_id
 
     p, _ = Profile.objects.get_or_create(
@@ -62,7 +68,6 @@ def do_send_log(update: Update, context: CallbackContext):
 def do_allstation(update: Update, context: CallbackContext):
     """Функция вывода всех остановок избранного транспорта, с проверкой на их существование """
     chat_id = update.message.chat_id
-
     p, _ = Profile.objects.get_or_create(
         external_id=chat_id,
         defaults={
@@ -154,6 +159,7 @@ def do_add_station(update: Update, context: CallbackContext):
         )
     else:
         client_status_station[chat_id] = 'wait_for_data_station'
+        client_status_transport[chat_id] = ''
         update.message.reply_text(
             text=f'🛠Добавить избранную остановку(Автобус 100 Козлова)\n☝️ВАЖНО: если остановка начинается что-то вроде'
                  f' Площадь / Станция и т.д, \n❗️писать нужно само название - Немига, Якуба, Победы❗:'
@@ -177,6 +183,7 @@ def do_add_transport(update: Update, context: CallbackContext):
         )
     else:
         client_status_transport[chat_id] = 'wait_for_data_transport'
+        client_status_station[chat_id] = ''
         update.message.reply_text(
             text=f'🛠Добавить избранный транспорт(Автобус 100):'
         )
@@ -207,9 +214,9 @@ def do_dell_transport(update: Update, context: CallbackContext):
 
     else:
         update.message.reply_text(
-            text=f'🛠{SelectedTransport.objects.filter(profile=p)[1]}: ⚠️ удален'
+            text=f'🛠{SelectedTransport.objects.filter(profile=p).order_by("id")[0]}: ⚠️ удален'
         )
-        SelectedTransport.objects.filter(profile=p)[1].delete()
+        SelectedTransport.objects.filter(profile=p).order_by('id')[0].delete()
 
 
 @log_errors
@@ -235,9 +242,9 @@ def do_dell_station(update: Update, context: CallbackContext):
 
     else:
         update.message.reply_text(
-            text=f'🛠Остановка 🚏 {SelectedStation.objects.filter(profile=p)[1]}: ⚠️ удалена'
+            text=f'🛠Остановка 🚏 {SelectedStation.objects.filter(profile=p).order_by("id")[0]}: ⚠️ удалена'
         )
-        SelectedStation.objects.filter(profile=p)[1].delete()
+        SelectedStation.objects.filter(profile=p).order_by('id')[0].delete()
 
 
 @log_errors
@@ -293,28 +300,9 @@ def do_echo_add(update: Update, context: CallbackContext):
                     text=f'✨ Маршрут от остановки 🚏: {station_one[2]} добавлен ✅'
                 )
             # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-            elif chat_id in client_status_transport and len(station_o) != 2 and client_status_transport[
-
-                chat_id] == 'wait_for_data_transport' and parser_all_station(station_o[0],
-                                                                             station_o[
-                                                                                 1]) == None and SelectedTransport.objects.filter(
-                profile=p).values_list(
-                'transport',
-                flat=True).count() < 2:
-                del client_status_transport[chat_id]
-                # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
-
-                update.message.reply_text(
-
-                    text=f'❗ Транспорт не сохранен. Проверьте корректность написания ❗'
-
-                )
-            elif chat_id in client_status_transport and len(station_o) != 2 and client_status_transport[
-
-                chat_id] == 'wait_for_data_transport' and parser_all_station(station_o[0],
-                                                                             station_o[1]) == None and text[
-                                                                                                       -1:].isdigit() == False and SelectedTransport.objects.filter(
-                profile=p).values_list(
+            elif chat_id in client_status_transport  and client_status_transport[
+                chat_id] == 'wait_for_data_transport' and parser_all_station(station_o[0],station_o[1]) == None \
+                    and len(station_o) != 2 and SelectedTransport.objects.filter(profile=p).values_list(
                 'transport',
                 flat=True).count() < 2:
                 del client_status_transport[chat_id]
@@ -325,31 +313,29 @@ def do_echo_add(update: Update, context: CallbackContext):
 
                 )
             elif chat_id in client_status_transport and client_status_transport[
-                chat_id] == 'wait_for_data_transport' and text[
-                                                          -1:].isdigit() == True and SelectedTransport.objects.filter(
+                chat_id] == 'wait_for_data_transport' and (parser_all_station(station_o[0],station_o[1]) != None) and\
+                    (len(station_o) < 3) and SelectedTransport.objects.filter(
                 profile=p).values_list(
                 'transport',
                 flat=True).count() < 2:
                 add_data_transport = SelectedTransport.objects.create(profile=p, transport=text)
                 add_data_transport.save
                 del client_status_transport[chat_id]
-                # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать вывод
+                # обратиться к БД и достать инфу транспорта, запихнуть в функцию и показать выводк
                 update.message.reply_text(
                     text=f'✨ Транспорт 🚍: {add_data_transport} добавлен ✅'
                 )
             else:
                 hand_add_st = [x for x in text.split(' ')]
                 if len(hand_add_st) == 2:
-                    # hand_trans_data = parser_station(hand_add_st[0], hand_add_st[1])
-                    # update.message.reply_text(
-                    #     text=f'✨ Направления {hand_add_st[1]} {hand_add_st[0].upper()} 🚍 : \n{hand_trans_data}',
-                    # )
                     if parser_all_station(hand_add_st[0], hand_add_st[1]) != None:
                         hand_trans_data = parser_all_station(hand_add_st[0], hand_add_st[1])
                         update.message.reply_text(
                             text=f'✨ Все остановки🚏 {hand_add_st[0].upper()} 🚍: {hand_add_st[1]}\n {hand_trans_data}',
                         )
                     else:
+                        client_status_station[chat_id] = ''
+                        client_status_transport[chat_id] = ''
                         update.message.reply_text(
 
                             text=f'❌ Я Вас не понимаю. Введите /help чтобы узнать как я работаю ❌'
@@ -357,6 +343,8 @@ def do_echo_add(update: Update, context: CallbackContext):
                         )
                 else:
                     if parser_station_n(hand_add_st[0], hand_add_st[1], hand_add_st[2][0].upper() + hand_add_st[2][1:]) == None:
+                        client_status_station[chat_id] = ''
+                        client_status_transport[chat_id] = ''
                         update.message.reply_text(
 
                             text=f'❌ Я Вас не понимаю. Введите /help чтобы узнать как я работаю ❌'
@@ -417,6 +405,8 @@ def do_help(update: Update, context: CallbackContext):
         profile=p,
         text=text,
     ).save()
+
+
 
 
 @log_errors
@@ -499,8 +489,11 @@ class Command(BaseCommand):
         message_handler9 = CommandHandler('log', do_send_log)
         updater.dispatcher.add_handler(message_handler9)
 
+
         message_handler = MessageHandler(Filters.text, do_echo_add)
         updater.dispatcher.add_handler(message_handler)
+
+
 
         # 3 -- обработчик
         updater.start_polling()

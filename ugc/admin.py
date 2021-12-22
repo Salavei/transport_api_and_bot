@@ -12,6 +12,7 @@ from .models import SelectedTransport
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'external_id', 'name')
     form = ProfileForm
+    search_fields = ['external_id']
 
 
 @admin.register(Message)
