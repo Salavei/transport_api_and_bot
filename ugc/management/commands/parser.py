@@ -21,7 +21,7 @@ def parser_time_wait(hah, hah_two, left, right, station):
         for x in take_for_will_be:
             soup2 = BeautifulSoup(str(x), 'lxml')
             will_be = soup2.find('span')
-            all_time = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
+            all_time = ' '.join(now.text.split()), ' '.join(will_be.text.split())
 
     if hah_two == None:
         all_time_two = ' ❗️Такой отановки в этом направлении не существует❗️'
@@ -40,8 +40,8 @@ def parser_time_wait(hah, hah_two, left, right, station):
         for v in take_for_will_be_two:
             soup2 = BeautifulSoup(str(v), 'lxml')
             will_be = soup2.find('span')
-            all_time_two = [' '.join(now.text.split()), ' '.join(will_be.text.split())]
-    return f"⬅️{' '.join(left.text.split())}\n🕐{all_time} \n", f"\n➡️{' '.join(right.text.split())}\n🕐{all_time_two}"
+            all_time_two = ' '.join(now.text.split()), ' '.join(will_be.text.split())
+    return f"Левое направление: {all_time}", f"Правое направление:  {all_time_two}"
 
 
 def parser_station(transport):
@@ -112,7 +112,7 @@ def parser_all_station(transport, number_transport):
         soup = BeautifulSoup(html, 'lxml')
         firs_all_station = soup.find('ul', {"class": "list-group"}).text
         second_all_station = soup.find('div', {"id": "direction-1"}).text
-        return f"⬅️ {' '.join(firs_all_station.split())} \n \n➡️ {' '.join(second_all_station.split())}"
+        return ' '.join(firs_all_station.split()), ' '.join(second_all_station.split())
     except AttributeError:
         return None
 

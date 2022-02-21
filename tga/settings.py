@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'rest_framework',
     'ugc',
 ]
 
@@ -38,14 +38,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tga.urls'
 
-
 DATABASES = {
     'default': {
         'ENGINE': env('DATABASES_ENGINE'),
         'NAME': BASE_DIR / env('DATABASES_NAME'),
     }
 }
-
 
 TEMPLATES = [
     {
@@ -64,9 +62,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tga.wsgi.application'
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -99,7 +94,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -116,3 +110,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+TOKEN = env('TOKEN')
+DATABASES_LOCATION = env('DATABASES_LOCATION')
