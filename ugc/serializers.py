@@ -1,21 +1,14 @@
-from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from .models import SelectedTransport, SelectedStation
 
-class TransportSerializer(ModelSerializer):
-    name_transport = serializers.CharField()
-    number_transport = serializers.CharField()
 
+class TransportSerializer(ModelSerializer):
     class Meta:
         model = SelectedTransport
-        fields = ('name_transport', 'number_transport')
+        fields = ('transport_type', 'transport_number')
 
 
 class StationSerializer(ModelSerializer):
-    name_transport = serializers.CharField()
-    number_transport = serializers.CharField()
-    station = serializers.CharField()
-
     class Meta:
         model = SelectedStation
-        fields = ('name_transport', 'number_transport', 'station')
+        fields = ('transport_type', 'transport_number', 'station')

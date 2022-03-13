@@ -24,10 +24,12 @@ class SelectedTransport(models.Model):
         on_delete=models.PROTECT,
     )
     transport_type = models.TextField(
-        verbose_name='Избранный транспорт'
+        blank=False,
+        verbose_name='Название транспорта'
     )
     transport_number = models.TextField(
-        verbose_name='Избранный транспорт'
+        blank=False,
+        verbose_name='Номер транспорта'
     )
 
     def __str__(self):
@@ -45,13 +47,16 @@ class SelectedStation(models.Model):
         on_delete=models.PROTECT,
     )
     transport_type = models.TextField(
-        verbose_name='Избранный транспорт'
+        blank=False,
+        verbose_name='Название транспорта'
     )
     transport_number = models.TextField(
-        verbose_name='Избранный транспорт'
+        blank=False,
+        verbose_name='Номер транспорта'
     )
     station = models.TextField(
-        verbose_name='Избранный маршрут'
+        blank=False,
+        verbose_name='Остановка'
     )
 
     def __str__(self):
