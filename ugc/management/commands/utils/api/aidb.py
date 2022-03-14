@@ -35,13 +35,15 @@ class SQLestate:
 
     def show_all_my_station(self, external_id):
         with self.connection:
-            result = self.cursor.execute('SELECT `transport_type`, `transport_number`, `station` FROM `ugc_selectedstation` WHERE `profile_id` = ?',
-                                         (external_id,)).fetchall()
+            result = self.cursor.execute(
+                'SELECT `transport_type`, `transport_number`, `station` FROM `ugc_selectedstation` WHERE `profile_id` = ?',
+                (external_id,)).fetchall()
             return result
 
     def count_station(self, external_id):
         with self.connection:
-            result = self.cursor.execute('SELECT * FROM `ugc_selectedstation` WHERE `profile_id` = ?',(external_id,)).fetchall()
+            result = self.cursor.execute('SELECT * FROM `ugc_selectedstation` WHERE `profile_id` = ?',
+                                         (external_id,)).fetchall()
             return len(result)
 
     def count_transp(self, external_id):
@@ -50,30 +52,47 @@ class SQLestate:
                                          (external_id,)).fetchall()
             return len(result)
 
-
     def add_stats(self, transport_type, transport_number, station, external_id):
-
         with self.connection:
-            return self.cursor.execute("INSERT INTO `ugc_selectedstation` (`transport_type`,`transport_number`,`station`,`profile_id`) VALUES(?, ?, ?,?)",
-                                       (transport_type, transport_number, station, external_id,))
+            return self.cursor.execute(
+                "INSERT INTO `ugc_selectedstation` (`transport_type`,`transport_number`,`station`,`profile_id`) VALUES(?, ?, ?,?)",
+                (transport_type, transport_number, station, external_id,))
 
     def add_tran(self, transport_type, transport_number, external_id):
         with self.connection:
-            return self.cursor.execute("INSERT INTO `ugc_selectedtransport` (`transport_type`,`transport_number`,`profile_id`) VALUES(?,?,?)",
-                                       (transport_type, transport_number, external_id,))
+            return self.cursor.execute(
+                "INSERT INTO `ugc_selectedtransport` (`transport_type`,`transport_number`,`profile_id`) VALUES(?,?,?)",
+                (transport_type, transport_number, external_id,))
 
     def show_all_my_transport(self, external_id):
         with self.connection:
-            result = self.cursor.execute('SELECT `transport_type`, `transport_number` FROM `ugc_selectedtransport` WHERE `profile_id` = ?',
-                                         (external_id,)).fetchall()
+            result = self.cursor.execute(
+                'SELECT `transport_type`, `transport_number` FROM `ugc_selectedtransport` WHERE `profile_id` = ?',
+                (external_id,)).fetchall()
             return result
 
     def dell_my_transport(self, external_id):
         with self.connection:
-            return self.cursor.execute('DELETE FROM `ugc_selectedtransport` WHERE `profile_id` = ?',
-                                       (external_id,))
+            take_id = \
+                self.cursor.execute('SELECT `id` FROM `ugc_selectedtransport` WHERE `profile_id` = ? ORDER BY `id`',
+                                    (external_id,)).fetchone()[0]
+            result = self.cursor.execute(
+                'SELECT `transport_type`, `transport_number` FROM `ugc_selectedtransport` WHERE `id` = ?',
+                (take_id,)).fetchall()
+
+            self.cursor.execute('DELETE FROM `ugc_selectedtransport` WHERE `profile_id` = ? and `id`  = ?',
+                                (external_id, take_id,))
+            return result
 
     def dell_my_station(self, external_id):
         with self.connection:
-            return self.cursor.execute('DELETE FROM `ugc_selectedstation` WHERE `profile_id` = ?',
-                                       (external_id,))
+            take_id = \
+                self.cursor.execute('SELECT `id` FROM `ugc_selectedstation` WHERE `profile_id` = ? ORDER BY `id`',
+                                    (external_id,)).fetchone()[0]
+
+            result = self.cursor.execute(
+                'SELECT `transport_type`, `transport_number`, `station` FROM `ugc_selectedstation` WHERE `id` = ?',
+                (take_id,)).fetchall()
+            self.cursor.execute('DELETE FROM `ugc_selectedstation` WHERE `profile_id` = ? and `id`  = ?',
+                                (external_id, take_id,))
+            return result

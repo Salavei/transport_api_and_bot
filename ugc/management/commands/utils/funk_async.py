@@ -9,16 +9,16 @@ async def show_save_transport(message: types.Message):
         await message.answer(text='❌ Вы еще не добавили ни одного транспорта ❌')
     elif adb.count_transp(*adb.give_user_id(message.from_user.id)) < 2:
         await message.answer(
-            text=f'{adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0]} ✨ Все остановки🚏')
+            text=f'{adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0][0]} {adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0][1]} ✨ Все остановки🚏')
         await message.answer(
             text=f'⬅️{parser_all_station(*adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0])[0]}\n\n➡️{parser_all_station(*adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0])[1]}')
     else:
         await message.answer(
-            text=f'{adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0]} ✨ Все остановки🚏')
+            text=f'{adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0][0]} {adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0][1]} ✨ Все остановки🚏')
         await message.answer(
             text=f'⬅️{parser_all_station(*adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0])[0]}\n\n➡️{parser_all_station(*adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[0])[1]}')
         await message.answer(
-            text=f'{adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[1]} ✨ Все остановки🚏')
+            text=f'{adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[1][0]} {adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[1][1]} ✨ Все остановки🚏')
         await message.answer(
             text=f'⬅️{parser_all_station(*adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[1])[0]}\n\n➡️{parser_all_station(*adb.show_all_my_transport(*adb.give_user_id(message.from_user.id))[1])[1]}')
 
@@ -64,8 +64,7 @@ async def dell_save_transport(message: types.Message):
     if not adb.show_all_my_transport(*adb.give_user_id(message.from_user.id)):
         await message.answer(text='❌ У вас еще нет транспорта чтобы его удалить ❌')
     else:
-        adb.dell_my_transport(*adb.give_user_id(message.from_user.id))
-        await message.answer(text='⚠️Удалили транспорт')
+        await message.answer(text=f'⚠️Удалили транспорт {adb.dell_my_transport(*adb.give_user_id(message.from_user.id))}')
 
 
 async def dell_save_station(message: types.Message):
@@ -73,8 +72,7 @@ async def dell_save_station(message: types.Message):
     if not adb.show_all_my_station(*adb.give_user_id(message.from_user.id)):
         await message.answer(text='❌ У вас еще нет остановок чтобы их удалить ❌')
     else:
-        adb.dell_my_station(*adb.give_user_id(message.from_user.id))
-        await message.answer(text='⚠️Удалили остановку')
+        await message.answer(text=f'⚠️Удалили остановку {adb.dell_my_station(*adb.give_user_id(message.from_user.id))}')
 
 
 async def about_help(message: types.Message):

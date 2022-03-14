@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from ugc.management.commands.main import dp, adb
+from ugc.management.commands.parser import parser_station_n, parser_all_station
 
 
 class FSMstationadd(StatesGroup):
@@ -36,11 +37,15 @@ async def write_name_station_add_station(message: types.Message, state: FSMConte
     async with state.proxy() as data:
         data['name_station'] = message.text
         await FSMstationadd.next()
-        adb.add_stats(transport_type=data['type_transport'], transport_number=data['number_transport']
-                      , station=f"{data['name_station'][0].upper() + data['name_station'][1:].lower()}",
-                      external_id=adb.give_user_id(message.from_user.id)[0])
-        await message.answer(
-            text=f"✨ Маршрут от остановки 🚏: {data['name_station'][0].upper() + data['name_station'][1:].lower()} добавлен ✅")
+        if '❌' not in parser_station_n(data['type_transport'], data['number_transport'],
+                                       data['name_station'][0].upper() + data['name_station'][1:].lower()):
+            adb.add_stats(transport_type=data['type_transport'], transport_number=data['number_transport']
+                          , station=f"{data['name_station'][0].upper() + data['name_station'][1:].lower()}",
+                          external_id=adb.give_user_id(message.from_user.id)[0])
+            await message.answer(
+                text=f"✨ Маршрут от остановки 🚏: {data['name_station'][0].upper() + data['name_station'][1:].lower()} добавлен ✅")
+        else:
+            await message.answer(text=f"❌ Ошибка названия транспорта! ❌")
         await state.finish()
 
 
@@ -67,7 +72,10 @@ async def write_number_transport(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['number_transport'] = message.text
         await FSMadd_transport.next()
-        adb.add_tran(transport_type=data['type_transport'], transport_number=data['number_transport'],
-                     external_id=adb.give_user_id(message.from_user.id)[0])
-        await message.answer(text=f"✨ Транспорт 🚍: {data['type_transport'], data['number_transport']} добавлен ✅")
+        if '❌' not in parser_all_station(data['type_transport'], data['number_transport']):
+            adb.add_tran(transport_type=data['type_transport'], transport_number=data['number_transport'],
+                         external_id=adb.give_user_id(message.from_user.id)[0])
+            await message.answer(text=f"✨ Транспорт 🚍: {data['type_transport'], data['number_transport']} добавлен ✅")
+        else:
+            await message.answer(text=f"❌ Ошибка названия транспорта! ❌")
         await state.finish()

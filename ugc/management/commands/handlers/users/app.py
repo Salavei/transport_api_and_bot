@@ -16,18 +16,19 @@ async def bot_start(message: types.Message):
 
 
 async def error(message: types.Message):
-    if len(message.text.split(' ')) == 2:
+    if len(message.text.split(' ')) == 2 and '❌' not in parser_all_station(message.text.split(' ')[0], message.text.split(' ')[1]):
         await message.answer(
             text=f'{message.text} ✨ Все остановки🚏')
         await message.answer(
             text=f"⬅️{parser_all_station(message.text.split(' ')[0], message.text.split(' ')[1])[0]}\n\n➡️{parser_all_station(message.text.split(' ')[0], message.text.split(' ')[1])[1]}")
-    elif len(message.text.split(' ')) > 2:
+    elif len(message.text.split(' ')) > 2  and '❌' not in parser_station_n(message.text.split(' ')[0], message.text.split(' ')[1], message.text.split(' ')[2]):
 
         await message.answer(
-            text=f"✨ Транспорт {message.text.split(' ')[0], message.text.split(' ')[1]}\nОстановка 🚏 {message.text.split(' ')[2]}:")
+            text=f"✨ Транспорт: {message.text.split(' ')[0]}, {message.text.split(' ')[1]}\nОстановка 🚏 {message.text.split(' ')[2]}:")
         await message.answer(
-            text=f"{parser_station_n(message.text.split(' ')[0], message.text.split(' ')[1], message.text.split(' ')[2])[1]}\n{parser_station_n(message.text.split(' ')[0], message.text.split(' ')[1], message.text.split(' ')[2])[0]}")
-
+            text=f"{parser_station_n(message.text.split(' ')[0], message.text.split(' ')[1], message.text.split(' ')[2])[0]}\n{parser_station_n(message.text.split(' ')[0], message.text.split(' ')[1], message.text.split(' ')[2])[1]}")
+    else:
+        await message.answer(text='⚠️Проверьте написание названия транспорта!!')
 
 @dp.message_handler(content_types=['text'])
 async def command_start_text(message: types.Message):

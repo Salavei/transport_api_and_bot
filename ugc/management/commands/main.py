@@ -5,12 +5,12 @@ from ugc.management.commands.utils.api.aidb import SQLestate
 from pathlib import Path
 import environ
 from tga.settings import TOKEN, DATABASES_LOCATION
+#
+# env = environ.Env()
+# environ.Env.read_env()
 
-env = environ.Env()
-environ.Env.read_env()
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(env_file=str(BASE_DIR) + '/.env')
+# BASE_DIR = Path(__file__).resolve().parent.parent
+# environ.Env.read_env(env_file=str(BASE_DIR) + '/.env')
 
 adb = SQLestate(DATABASES_LOCATION)
 logging.basicConfig(level=logging.INFO)
