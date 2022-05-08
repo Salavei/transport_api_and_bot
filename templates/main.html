@@ -7,50 +7,72 @@
     <link href="{% static 'favicon.png' %}" rel="shortcut icon">
     <title>Штаны за 40 гривень</title>
 </head>
-<div id="root"></div>
-<div class="up-overlay">ЙОБ ТВОЮ МАТЬ, ЗА</div>
-<div class="up-BYN">{{byn}}</div>
-<div class="up-BYN1">BYN</div>
-<div class="up-RUB">{{rub}}</div>
-<div class="up-RUB1">RUB</div>
-<div class="up-USD">{{usd}}</div>
-<div class="up-USD1">USD</div>
-<div class="down-overlay">ШТАНЫ</div>
-<div class="about_conversion">Количество штанов, которое может купить житель страны, исходя из среднего дохода:</div>
-<div class="about_conversion_ua">Украина -</div>
-<div class="about_conversion_by">Беларусь -</div>
-<div class="about_conversion_ru">Россия -</div>
-<div class="about_conversion_usa">США -</div>
-<div class="conversion_uah">{{conversion_uah}}</div>
-<div class="conversion_byn">{{conversion_byn}}</div>
-<div class="conversion_rub">{{conversion_rub}}</div>
-<div class="conversion_usd">{{conversion_usd}}</div>
 <body>
-<div class="video_overlays"></div>
-<div id="trailer" class="is_overlay">
+
+<header>
+    <div class="container">
+        <div class="count_pants">
+            <p>Количество штанов, которое может купить житель страны, исходя из среднего дохода:&nbsp;&nbsp;&nbsp;Украина
+                - {{ conversion_uah }}&nbsp;&nbsp;&nbsp;Беларусь - {{ conversion_byn }}&nbsp;&nbsp;&nbsp;Россия - {{ conversion_rub }}&nbsp;&nbsp;&nbsp;США
+                - {{ conversion_usd }}
+            </p>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="main_money">
+        <p class="head_money_text">ЙОБ ТВОЮ МАТЬ, ЗА</p>
+        <div class="course">
+            <div class="row">
+                <p class="count_money"  style="font-size: 65px">{{ byn }}</p>
+                <p class="name_money" style="font-size: 20px">BYN</p>
+            </div>
+            <div class="row">
+                <p class="count_money"  style="font-size: 65px">{{ rub }}</p>
+                <p class="name_money"  style="font-size: 20px">RUB</p>
+            </div>
+            <div class="row">
+                <p class="count_money"  style="font-size: 65px">{{ usd }}</p>
+                <p class="name_money"  style="font-size: 20px">USD</p>
+            </div>
+
+        </div><br>
+        <p>ШТАНЫ</p>
+    </div>
+
+    <div class="video_overlays"></div>
+    <div class="background_video">
+        <video id="video" width="100%" height="100%" autoplay="autoplay" muted loop="loop" preload="auto">
+            <source src="{% static 'videoplayback.mp4' %}" type='video/mp4'/>
+        </video>
+    </div>
 
 
-    <video id="video" width="100%" height="100%" autoplay="autoplay" muted loop="loop" preload="auto">
-        <source src="{% static 'videoplayback.mp4' type='video/mp4' %}"></source>
-
-    </video>
-
-</div>
-<div class="gcons">
-    <p><a href="https://vk.com/"><img src="{% static 'vk.png' %}" width="30"
-                                      height="30" alt="Пример"></a></p>
-    <p><a href="http://twitter.com"><img src="{% static 'twitter.png' %}" width="30"
-                                         height="30" alt="Пример"></a></p>
-    <p><a href="http://facebook.com"><img src="{% static 'fb.png' %}" width="30"
+    <div class="gcons">
+        <p><a href="https://vk.com/"><img src="{% static 'vk.png' %}" width="30"
                                           height="30" alt="Пример"></a></p>
+        <p><a href="http://twitter.com"><img src="{% static 'twitter.png' %}" width="30"
+                                             height="30" alt="Пример"></a></p>
+        <p><a href="http://facebook.com"><img src="{% static 'fb.png' %}" width="30"
+                                              height="30" alt="Пример"></a></p>
 
-</div>
-<button class="myButton" onclick="enableMute()" type="button">ЗВУК</button>
+    </div>
+
+    <button class="myButton" onclick="enableMute()" type="button">ЗВУК</button>
+
+</main>
+
+
 <script>
     var vid = document.getElementById("video");
 
     function enableMute() {
-        vid.muted = false;
+        if (vid.muted == true) {
+            vid.muted = false;
+        } else {
+            vid.muted = true;
+        }
     }
 </script>
 </body>
