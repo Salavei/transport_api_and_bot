@@ -51,6 +51,13 @@ main {
     display: inline-block;
 }
 
+.row .count_money {
+    font-size: 65px;
+}
+
+.row .name_money {
+    font-size: 20px
+}
 
 .video_overlays {
     position: absolute;
@@ -93,4 +100,232 @@ button {
     color: #fff;
     font-family: Gill Sans, sans-serif;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 1024px) {
+
+
+    body {
+        overflow: hidden;
+        transform: rotate(90deg);
+        transform-origin: bottom left;
+        width: 100vh;
+        height: 70vw;
+        margin-left: 30vw;
+        margin-top: -72vw;
+        background: #333;
+    }
+
+    header {
+        color: #fff;
+        width: 100%;
+        top: 0;
+        line-height: 45px;
+        font-size: 8px;
+        cursor: default;
+    }
+
+
+    .count_pants p {
+        list-style: none;
+        margin-left: 40px;
+        padding: 0;
+        display: block;
+        text-decoration: none;
+    }
+
+
+    .main_money {
+        color: #fff;
+        cursor: default;
+        text-align: center;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-weight: 500; /* Светлое начертание */
+    }
+
+    .main_money > p {
+        font-size: 10px;
+        margin-block: 62px;
+    }
+
+    main {
+        padding: 4px 0;
+        margin-top: 0;
+    }
+
+    .row {
+        margin: -74px;
+        transform-origin: top left;
+        height: 116px;
+        width: 456px;
+        display: inline-block;
+    }
+
+    .row .count_money {
+        font-size: 20px;
+    }
+
+    .row .name_money {
+        font-size: 13px
+    }
+
+    .video_overlays {
+        position: absolute;
+        top: 0;
+        left: 0;
+        float: left;
+        width: 200%;
+        min-height: 300%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: -1;
+    }
+
+
+    .background_video > video {
+        position: absolute;
+        object-fit: cover;
+        top: 0;
+        left: 0;
+        width: 103%;
+        height: 150%;
+        z-index: -2;
+    }
+
+    .gcons {
+        position: absolute;
+        top: 173px;
+        z-index: 5;
+    }
+
+    button {
+        position: fixed;
+        bottom: -91px;
+        left: 99%;
+        margin-left: -66.5px;
+        background-color: transparent;
+        border-radius: 52px;
+        font-size: 65%;
+        font-weight: lighter;
+        border: 2px solid #fff;
+        color: #fff;
+        font-family: Gill Sans, sans-serif;
+        cursor: pointer;
+    }
+
+
+}
+
+
+
+@media only screen and (max-width: 700px) {
+
+
+    body {
+    overflow: hidden;
+    transform: rotate(90deg);
+    transform-origin: bottom left;
+    /* width: 100%; */
+    /* height: 200%; */
+    margin-left: 29vw;
+    margin-top: -75vw;
+    background: #333;
+}
+
+    header {
+    color: #fff;
+    width: 94%;
+    top: 0;
+    line-height: 25px;
+    font-size: 7px;
+    cursor: default;
+}
+
+
+    .count_pants p {
+        list-style: none;
+        margin-left: 40px;
+        padding: 0;
+        display: block;
+        text-decoration: none;
+    }
+
+
+    .main_money {
+        color: #fff;
+        cursor: default;
+        text-align: center;
+        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
+        font-weight: 500; /* Светлое начертание */
+    }
+
+    .main_money > p {
+        font-size: 10px;
+        margin-block: 10%;
+    }
+
+    main {
+        padding: 4px 0;
+        margin-top: 0;
+    }
+
+    .row {
+        margin: -88px;
+        transform-origin: top left;
+        height: 116px;
+        width: 456px;
+        display: inline-block;
+    }
+
+    .row .count_money {
+        font-size: 20px;
+    }
+
+    .row .name_money {
+        font-size: 13px
+    }
+
+    .video_overlays {
+        position: absolute;
+        top: 0;
+        left: 0;
+        float: left;
+        width: 200%;
+        min-height: 300%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: -1;
+    }
+
+
+    .background_video > video {
+        position: absolute;
+        object-fit: cover;
+        top: 0;
+        left: 0;
+        width: 103%;
+        height: 150%;
+        z-index: -2;
+    }
+
+    .gcons {
+            position: absolute;
+    top: 70%;
+    z-index: 5;
+    }
+
+    button {
+    position: fixed;
+    top: 128%;
+    left: 99%;
+    margin-left: -66.5px;
+    background-color: transparent;
+    border-radius: 52px;
+    font-size: 50%;
+    font-weight: lighter;
+    border: 2px solid #fff;
+    color: #fff;
+    font-family: Gill Sans, sans-serif;
+    cursor: pointer;
+}
+
+
 }
