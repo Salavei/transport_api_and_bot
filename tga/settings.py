@@ -15,6 +15,7 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(' ')
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -23,7 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'ugc',
+    'ugc.apps.UgcConfig',
+    'live_videos.apps.LiveVideosConfig'
 ]
 
 MIDDLEWARE = [

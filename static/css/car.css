@@ -1,62 +1,9 @@
-@import url(https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css);
-
-
 body {
     font-family: Roboto, sans-serif;
     margin: 0 auto;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.8);
 
-}
-
-header {
-    color: #fff;
-    width: 100%;
-    top: 0;
-    line-height: 45px;
-    font-size: 14px;
-    cursor: default;
-}
-
-.count_pants p {
-    list-style: none;
-    margin-left: 40px;
-    padding: 0;
-    display: block;
-    text-decoration: none;
-}
-
-
-.main_money {
-    color: #fff;
-    cursor: default;
-    text-align: center;
-    font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
-    font-weight: 500; /* Светлое начертание */
-}
-
-.main_money > p {
-    font-size: 35px;
-}
-
-main {
-    padding: 110px 0;
-    margin-top: 0;
-}
-
-.row {
-    margin: 49px;
-    /*height: 116px;*/
-    /*width: 456px;*/
-    display: inline-block;
-}
-
-.row .count_money {
-    font-size: 65px;
-}
-
-.row .name_money {
-    font-size: 20px
 }
 
 .video_overlays {
@@ -70,7 +17,6 @@ main {
     z-index: -1;
 }
 
-
 .background_video > video {
     position: absolute;
     object-fit: cover;
@@ -81,16 +27,11 @@ main {
     z-index: -2;
 }
 
-.gcons {
-    margin: -68px 33px;
-}
-
 button {
     position: fixed;
     bottom: 57px;
     left: 95%;
     margin-left: -104.5px;
-
     background-color: transparent;
     border-radius: 52px;
     font-size: 65%;
@@ -101,9 +42,26 @@ button {
     cursor: pointer;
 }
 
+
+.car_text {
+    padding-top: 10%;
+    font-size: 54px;
+    width: 100%;
+    color: #fff;
+    cursor: default;
+    text-align: center;
+    font-family: Gill Sans, sans-serif;
+    font-weight: 500;
+}
+
+.gcons {
+    display: inline-block;
+    padding-left: 39px;
+    padding-top: 102px;
+}
+
+
 @media only screen and (max-width: 1024px) {
-
-
     body {
         overflow: hidden;
         transform: rotate(90deg);
@@ -113,59 +71,6 @@ button {
         margin-left: 30vw;
         margin-top: -72vw;
         background: #333;
-    }
-
-    header {
-        color: #fff;
-        width: 100%;
-        top: 0;
-        line-height: 45px;
-        font-size: 8px;
-        cursor: default;
-    }
-
-
-    .count_pants p {
-        list-style: none;
-        margin-left: 40px;
-        padding: 0;
-        display: block;
-        text-decoration: none;
-    }
-
-
-    .main_money {
-        color: #fff;
-        cursor: default;
-        text-align: center;
-        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
-        font-weight: 500; /* Светлое начертание */
-    }
-
-    .main_money > p {
-        font-size: 10px;
-        margin-block: 62px;
-    }
-
-    main {
-        padding: 4px 0;
-        margin-top: 0;
-    }
-
-    .row {
-        margin: -74px;
-        transform-origin: top left;
-        /*height: 116px;*/
-        /*width: 456px;*/
-        display: inline-block;
-    }
-
-    .row .count_money {
-        font-size: 20px;
-    }
-
-    .row .name_money {
-        font-size: 13px
     }
 
     .video_overlays {
@@ -211,13 +116,9 @@ button {
         cursor: pointer;
     }
 
-
 }
 
-
 @media only screen and (max-width: 700px) {
-
-
     body {
         overflow: hidden;
         transform: rotate(90deg);
@@ -229,57 +130,15 @@ button {
         background: #333;
     }
 
-    header {
-        color: #fff;
-        width: 94%;
-        top: 0;
-        line-height: 25px;
-        font-size: 7px;
-        cursor: default;
-    }
-
-
-    .count_pants p {
-        list-style: none;
-        margin-left: 40px;
-        padding: 0;
-        display: block;
-        text-decoration: none;
-    }
-
-
-    .main_money {
+    .car_text {
+        padding-top: 1%;
+        font-size: 50px;
+        width: 100%;
         color: #fff;
         cursor: default;
         text-align: center;
-        font-family: Gill Sans, sans-serif; /* Гарнитура шрифта */
-        font-weight: 500; /* Светлое начертание */
-    }
-
-    .main_money > p {
-        font-size: 10px;
-        margin-block: 10%;
-    }
-
-    main {
-        padding: 4px 0;
-        margin-top: 0;
-    }
-
-    .row {
-        margin: -88px;
-        transform-origin: top left;
-        /*height: 116px;*/
-        /*width: 456px;*/
-        display: inline-block;
-    }
-
-    .row .count_money {
-        font-size: 20px;
-    }
-
-    .row .name_money {
-        font-size: 13px
+        font-family: Gill Sans, sans-serif;
+        font-weight: 500;
     }
 
     .video_overlays {
@@ -306,7 +165,7 @@ button {
 
     .gcons {
         position: absolute;
-        top: 70%;
+        top: 44%;
         z-index: 5;
     }
 
@@ -324,6 +183,5 @@ button {
         font-family: Gill Sans, sans-serif;
         cursor: pointer;
     }
-
 
 }

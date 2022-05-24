@@ -3,9 +3,11 @@ from rest_framework import status
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from ugc.management.commands.parser import parser_all_station, parser_station_n
+from .models import SelectedTransport, SelectedStation
 
 
 class TransportSerializerView(ViewSet):
+    queryset = SelectedTransport.objects.all()
     serializer_class = TransportSerializer
 
     def create(self, request, *args, **kwargs):
@@ -18,6 +20,7 @@ class TransportSerializerView(ViewSet):
 
 
 class StationSerializerView(ViewSet):
+    queryset = SelectedStation.objects.all()
     serializer_class = StationSerializer
 
     def create(self, request, *args, **kwargs):

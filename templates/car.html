@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <link href="{% static 'favicon.png' %}" rel="shortcut icon">
+    <link href="{% static 'css/car.css' %}" rel="stylesheet">
+    <title>Стой-стой-стой</title>
+</head>
+<body>
+
+
+<div class="video_overlays"></div>
+<div class="background_video">
+    <video id="video" width="100%" height="100%" autoplay muted>
+        <source src="{% static 'video_car.mp4' %}" type='video/mp4'/>
+    </video>
+</div>
+
+<div class="car_text">
+    <p class="head_car_text">Стой - стой - стой блять</p> <p class="counter">0</p> <p>раз ебать</p>
+</div>
+
+<div class="gcons">
+    <p><a href="https://github.com/Salavei/"><img
+            style="filter: invert(42%) sepia(0%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(1519%);"
+            src="{% static 'github-svgrepo-com.svg' %}" width="30"
+            height="30" alt="github"></a></p>
+    <p><a href="https://www.linkedin.com/in/andrewsalavei/"><img
+            style="filter: invert(100%) sepia(0%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);"
+            src="{% static 'linkedin-svgrepo-com.svg' %}" width="30"
+            height="30" alt="linkedin"></a></p>
+    <p><a href="https://t.me/andrewsalavei"><img
+            style="filter: invert(92%) sepia(0%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);"
+            src="{% static 'telegram-svgrepo-com.svg' %}" width="30"
+            height="30" alt="telegram"></a></p>
+
+</div>
+<button class="myButton" onclick="enableMute()" type="button">ЗВУК</button>
+
+<script type='text/javascript'>
+    var vid = document.getElementById("video");
+    let loopCount = 0;
+    document.querySelector('video').addEventListener('ended', function () {
+        loopCount += 1;
+        console.log(loopCount)
+        document.querySelector(".counter").innerHTML = loopCount;
+        this.play();
+    })
+
+    function enableMute() {
+
+        if (vid.muted == true) {
+            vid.muted = false;
+        } else {
+            vid.muted = true;
+        }
+    }
+</script>
+</body>
+</html>
