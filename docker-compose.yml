@@ -1,0 +1,38 @@
+services:
+  web-app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./transport_helper:/transport_helper
+    environment:
+      - SECRET_KEY=YOUR_DATA
+      - DEBUG=YOUR_DATA(1 or 0)
+      - DJANGO_ALLOWED_HOSTS=YOUR_DATA(localhost 127.0.0.1 0.0.0.0)
+      - DB_HOST=YOUR_DATA
+      - DB_NAME=YOUR_DATA
+      - DB_USER=YOUR_DATA
+      - DB_PASS=YOUR_DATA
+    command: >
+      sh -c "gunicorn transport_helper.wsgi:application --bind 0.0.0.0:8000"
+      sh -c "python bot_app/management/commands/main.py"
+    depends_on:
+      - database
+  bot-app:
+    build:
+      context: .
+    environment:
+      - TOKEN=YOUR_DATA
+    command: >
+      sh -c "python bot_app/management/commands/main.py"
+    depends_on:
+      - database
+  database:
+    image: postgres:14.6-alpine
+    environment:
+      - POSTGRES_DB=YOUR_DATA
+      - POSTGRES_USER=YOUR_DATA
+      - POSTGRES_PASSWORD=YOUR_DATA
+    ports:
+      - "5432:5432"
