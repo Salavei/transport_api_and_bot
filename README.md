@@ -40,7 +40,7 @@ Entertaining home page about ``pants for 40 UAH``.
 On this page you can find up-to-date information about the rate of ` 40 UAH in ` BYN, RUB, USDm.  
 Also, calculation of the average salary of citizens of these countries and how much they can buy themselves pants at the rate of 40 UAH. 
   
-## Запуск
+## Launch
 
 ⋅*Create file `.env`  
 ⋅*Fill it:  
