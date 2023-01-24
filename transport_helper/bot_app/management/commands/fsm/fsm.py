@@ -12,7 +12,7 @@ class FSMstationadd(StatesGroup):
 
 async def add_station_start(message: types.Message):
     await FSMstationadd.type_transport.set()
-    await message.answer('Введите название транспорта (Автобус, Трамвай, Троллейбус):')
+    await message.answer('Enter the name of the transport (Bus, Tram, Trolleybus):')
 
 
 @dp.message_handler(state=FSMstationadd.type_transport)
@@ -20,7 +20,7 @@ async def write_type_transport_add_station(message: types.Message, state: FSMCon
     async with state.proxy() as data:
         data['type_transport'] = message.text
     await FSMstationadd.next()
-    await message.answer('Введите номер транспорта:')
+    await message.answer('Enter the vehicle number:')
 
 
 @dp.message_handler(state=FSMstationadd.number_transport)
@@ -28,7 +28,7 @@ async def write_number_transport_add_station(message: types.Message, state: FSMC
     async with state.proxy() as data:
         data['number_transport'] = message.text
         await FSMstationadd.next()
-        await message.answer('Введите название остановки:')
+        await message.answer('Enter the name of the stop:')
 
 
 @dp.message_handler(state=FSMstationadd.name_station)
@@ -36,15 +36,15 @@ async def write_name_station_add_station(message: types.Message, state: FSMConte
     async with state.proxy() as data:
         data['name_station'] = message.text
         await FSMstationadd.next()
-        if '❌' not in parser_station_n(data['type_transport'], data['number_transport'],
+        if 'Incorrect' not in parser_station_n(data['type_transport'], data['number_transport'],
                                        data['name_station'][0].upper() + data['name_station'][1:].lower()):
             adb.add_stats(transport_type=data['type_transport'], transport_number=data['number_transport']
                           , station=f"{data['name_station'][0].upper() + data['name_station'][1:].lower()}",
                           external_id=adb.give_user_id(message.from_user.id)[0])
             await message.answer(
-                text=f"✨ Маршрут от остановки 🚏: {data['name_station'][0].upper() + data['name_station'][1:].lower()} добавлен ✅")
+                text=f"✨ The route from the stop 🚏: {data['name_station'][0].upper()}{data['name_station'][1:].lower()} added ✅")
         else:
-            await message.answer(text=f"❌ Ошибка названия транспорта! ❌")
+            await message.answer(text=f"❌ Wrong transport name! ❌")
         await state.finish()
 
 
@@ -55,7 +55,7 @@ class FSMadd_transport(StatesGroup):
 
 async def add_transport_start(message: types.Message):
     await FSMadd_transport.type_transport.set()
-    await message.answer('Введите название транспорта (Автобус, Трамвай, Троллейбус):')
+    await message.answer('Enter the name of the transport (Bus, Tram, Trolleybus):')
 
 
 @dp.message_handler(state=FSMadd_transport.type_transport)
@@ -63,7 +63,7 @@ async def write_type_transport(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['type_transport'] = message.text
     await FSMadd_transport.next()
-    await message.answer('Введите номер транспорта:')
+    await message.answer('Enter the vehicle number:')
 
 
 @dp.message_handler(state=FSMadd_transport.number_transport)
@@ -71,10 +71,10 @@ async def write_number_transport(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['number_transport'] = message.text
         await FSMadd_transport.next()
-        if '❌' not in parser_all_station(data['type_transport'], data['number_transport']):
+        if 'Incorrect' not in parser_all_station(data['type_transport'], data['number_transport']):
             adb.add_tran(transport_type=data['type_transport'], transport_number=data['number_transport'],
                          external_id=adb.give_user_id(message.from_user.id)[0])
-            await message.answer(text=f"✨ Транспорт 🚍: {data['type_transport'], data['number_transport']} добавлен ✅")
+            await message.answer(text=f"✨ Transport 🚍: {data['type_transport']} {data['number_transport']} added ✅")
         else:
-            await message.answer(text=f"❌ Ошибка названия транспорта! ❌")
+            await message.answer(text=f"❌ Wrong transport name! ❌")
         await state.finish()

@@ -1,17 +1,4 @@
 services:
-  bot-app:
-    build:
-      context: .
-    environment:
-      - TOKEN=${TOKEN}
-      - DB_HOST=database
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-    command: >
-      sh -c "python bot_app/management/commands/main.py"
-    depends_on:
-      - web-app
   web-app:
     build:
       context: .
@@ -31,6 +18,19 @@ services:
       && gunicorn transport_helper.wsgi:application --bind 0.0.0.0:8000"
     depends_on:
       - database
+  bot-app:
+    build:
+      context: .
+    environment:
+      - TOKEN=${TOKEN}
+      - DB_HOST=database
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    command: >
+      sh -c "python bot_app/management/commands/main.py"
+    depends_on:
+      - web-app
   database:
     image: postgres:14.6-alpine
     environment:

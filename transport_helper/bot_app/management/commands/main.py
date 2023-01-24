@@ -8,7 +8,7 @@ import os
 TOKEN = os.environ.get('TOKEN')
 
 adb = SQLestate()
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 
 storage = MemoryStorage()
 bot = Bot(token=TOKEN)

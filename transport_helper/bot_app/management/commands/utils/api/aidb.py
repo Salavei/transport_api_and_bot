@@ -5,14 +5,14 @@ import psycopg2
 class SQLestate:
 
     def __init__(self):
-        """Подключаемся к БД и сохраняем курсор соединения"""
+        """Connect to the database and save the connection cursor"""
         self.connection = psycopg2.connect(host=os.environ.get('DB_HOST'), database=os.environ.get('DB_NAME'),
                                            user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASS'))
 
         self.cursor = self.connection.cursor()
 
     def check_subscriber(self, tg_id):
-        """Проверяем, есть ли уже юзер в базе"""
+        """Check if the user is already in the database"""
         self.cursor.execute("SELECT * FROM bot_app_profile WHERE external_id = %s", (tg_id,))
         result = self.cursor.fetchone()
         return result is not None
@@ -26,7 +26,7 @@ class SQLestate:
         return len(self.cursor.fetchall())
 
     def add_subscriber(self, external_id):
-        """Добавляем нового юзера"""
+        """Adding a new user"""
         with self.connection:
             self.cursor.execute("INSERT INTO bot_app_profile (id, external_id) VALUES(%s, %s)",
                                 (int(self.subscriber_exists()) + 1, external_id,))
