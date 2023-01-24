@@ -18,9 +18,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
-
-    'bot_app',
-    'home_page'
+    'bot_app'
 ]
 
 MIDDLEWARE = [
