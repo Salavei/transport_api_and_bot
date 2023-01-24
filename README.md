@@ -35,10 +35,6 @@ There is an Api, through which you can get the same information about the transp
 `` https://your_host/api/v1/infostation ``    
 <p align="center"><img width="1000" height="700" alt="api_1" src="https://user-images.githubusercontent.com/15955132/214378375-13d5d13e-6a2c-4554-b019-0b0483ef037d.png"><img width="1000" height="700" alt="api_2" src="https://user-images.githubusercontent.com/15955132/214378439-2863b655-bbef-4f83-96bf-b56ba5928870.png"></p>
 
-### Home Page
-Entertaining home page about ``pants for 40 UAH``.  
-On this page you can find up-to-date information about the rate of ` 40 UAH in ` BYN, RUB, USDm.  
-Also, calculation of the average salary of citizens of these countries and how much they can buy themselves pants at the rate of 40 UAH. 
   
 ## Launch
 
