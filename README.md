@@ -1,10 +1,6 @@
 # transport_timewait_bot_telegram
 Моя дипломная работа для TeachMeSkill. 
-http://40uah.duckdns.org  
-http://40uah.duckdns.org/api/infostation/ 
-http://40uah.duckdns.org/api/infotrans/  
-http://40uah.duckdns.org/car/  
-https://t.me/transport_minskBot  
+
 Технологии:   
 Django, DRF, Bs4, Aiogram, Docker.  
 Состоит из нескольких частей.  
