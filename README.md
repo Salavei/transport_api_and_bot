@@ -1,10 +1,10 @@
 <h1 align="center"> Hi there, I'm <a href="http://linkedin.com/in/andrewsalavei/" target="_blank">Andrew Salavei</a> 
 <img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" width="40" height="40"/></h1>
-<h3 align="center">Моя дипломная работа для TeachMeSkill.</h3>
+<h3 align="center">My thesis for TeachMeSkill.</h3>
 
 
 
-## Технологии <img src="https://user-images.githubusercontent.com/15955132/214321830-f3ccbde2-954e-4751-bdd3-c75ac96a8a0d.png" width="20" height="20">  
+## Technology <img src="https://user-images.githubusercontent.com/15955132/214321830-f3ccbde2-954e-4751-bdd3-c75ac96a8a0d.png" width="20" height="20">  
   
 
 ![icons8-python-48](https://user-images.githubusercontent.com/15955132/214317185-5e615db0-3bfd-4b32-8622-7bb0ea674c05.png)&nbsp;
@@ -14,29 +14,29 @@
 <img src="https://user-images.githubusercontent.com/15955132/214320602-1511e829-c307-4cc8-8425-b5b4b9b0fbf9.png" width="100" height="50">&nbsp;  
 ```Python  DRF  Aiogram   Docker   Bs4   ```  
  
-## Структура
-Состоит из нескольких частей.  
+## Structure
+Consists of several parts.  
 
-### Телеграм бот
-Телеграм бот с базой данных, которую можно администрировать через админ-панель Django.  
-У пользователя может быть по 2 сохранненых транспорта и 2 остановки.  
-Телеграм бот показывает актуальную информацию о прибытии транспорта и всех остановках транспорта.  
-Информация парсится со сторонних источников.  
+### Telegram bot
+Telegram bot with a database which can be administered through the Django admin panel.  
+The user can have 2 saved transports and 2 stops.  
+Telegram bot shows actual information about transport arrivals and all transport stops.  
+The information is parsed from third-party sources.   
 
 ### Api
-Имеется Api, через который можно получить эту же информацию о транспорте:  
-``` https://your_host/api/v1/infotrans ```    
-``` https://your_host/api/v1/infostation ```   
+There is an Api, through which you can get the same information about the transport:  
+`` https://your_host/api/v1/infotrans ``    
+`` https://your_host/api/v1/infostation ``    
 
-### Домашняя страница
-Развлекательная домашняя страница про `штанах за 40гривень`.  
-На этой странице вы сможете узнать актуальную информацию о курсе 40гривень в `BYN, RUB, USDм.  
-Так же, подсчет средней зарплаты граждан этих стран и сколько они могу купить себе штанов по курсу 40 гривень. 
+### Home Page
+Entertaining home page about ``pants for 40 UAH``.  
+On this page you can find up-to-date information about the rate of ` 40 UAH in ` BYN, RUB, USDm.  
+Also, calculation of the average salary of citizens of these countries and how much they can buy themselves pants at the rate of 40 UAH. 
   
 ## Запуск
 
-⋅*Создать файл `.env`  
-⋅*Заполнить его:  
+⋅*Create file `.env`  
+⋅*Fill it:  
 ```ts
 TOKEN=YOUR_TOKEN   
 SECRET_KEY=YOURK_SECRET_KEY  
@@ -45,12 +45,10 @@ DB_NAME=YOUR_DB_NAME
 DB_USER=YOUR_DB_USER  
 DB_PASS=YOUR_DB_PASS
 ```   
-⋅*Запустить билд `docker-compose build`   
-⋅*Запустить проект `docker-compose  --env-file .env  up`   
-⋅*Сделать миграции `docker-compose run --rm web-app sh -c "python manage.py migrate"`  
-⋅*Создать суперюзера `docker-compose run --rm web-app sh -c "python manage.py createsuperuser"`  
+⋅*Run the `docker-compose build`   
+⋅*Start project `docker-compose --env-file .env up`   
+⋅*Migration `docker-compose run --rm web-app sh -c "python manage.py migrate"`  
+⋅*Create superuser `docker-compose run --rm web-app sh -c "python manage.py createsuperuser"`  
 
-## Внешний вид
-<p align="center"><img width="500" alt="api_1" src="https://user-images.githubusercontent.com/15955132/214305166-bec02484-36c4-419c-9a4f-e8d98ae7a7f9.png"><img width="500" alt="api_2" src="https://user-images.githubusercontent.com/15955132/214305265-60371812-1ab3-45a3-b48f-525d2ec8a584.png"></p>
+## Appearance
 
- <p align="center"><img width="450" alt="Снимок экрана 2023-01-24 в 16 42 18" src="https://user-images.githubusercontent.com/15955132/214310223-0f000d57-f190-49ec-bbfc-c881e9f6eb65.png"><img width="450" alt="Снимок экрана 2023-01-24 в 16 41 45" src="https://user-images.githubusercontent.com/15955132/214310267-11bb898a-47fa-4b46-acfd-fe550dba078f.png"></p>
