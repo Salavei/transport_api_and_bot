@@ -23,10 +23,8 @@ The user can have 2 saved transports and 2 stops.
 Telegram bot shows actual information about transport arrivals and all transport stops.  
 The information is parsed from third-party sources.   
 
-<p align="center">  
-<img width="500"  height="600" alt="bot_1" src="https://user-images.githubusercontent.com/15955132/214379154-b76dddb7-295f-4b82-95af-67a67a538681.png"><img width="500"  height="600"  alt="bot_2" src="https://user-images.githubusercontent.com/15955132/214379218-2e2ecff6-2f9a-4577-914a-d1a153e3abbe.png"</p>
-<p align="center">
-<img width="500" height="600" alt="bot_3" src="https://user-images.githubusercontent.com/15955132/214379244-4a8ceb98-e1da-4031-9ec9-284db66ef922.png"><img width="500" height="600"  alt="bot_4" src="https://user-images.githubusercontent.com/15955132/214379259-6293dec1-5a43-41a3-b3fc-af9550b0c66b.png">
+<p align="center"><img width="500"  height="600" alt="bot_1" src="https://user-images.githubusercontent.com/15955132/214379154-b76dddb7-295f-4b82-95af-67a67a538681.png"><img width="500"  height="600"  alt="bot_2" src="https://user-images.githubusercontent.com/15955132/214379218-2e2ecff6-2f9a-4577-914a-d1a153e3abbe.png"</p>
+<p align="center"><img width="500" height="600" alt="bot_3" src="https://user-images.githubusercontent.com/15955132/214379244-4a8ceb98-e1da-4031-9ec9-284db66ef922.png"><img width="500" height="600"  alt="bot_4" src="https://user-images.githubusercontent.com/15955132/214379259-6293dec1-5a43-41a3-b3fc-af9550b0c66b.png">
 </p>
 
 
