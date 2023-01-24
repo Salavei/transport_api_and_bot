@@ -10,12 +10,12 @@ Django, DRF, Bs4, Aiogram, Docker.
 средней зарплаты граждан этих стран и сколько они могу купить себе штанов по курсу 40 гривень  
   
   
-Заполнить вашими данными environment в docker-compose  
+Заполнить вашими данными environment в docker-compose    
    
-Запустить билд docker-compose build
-Запустить проект docker-compose up
-Сделать миграции docker-compose run --rm web-app sh -c "python manage.py migrate"
-Создать суперюзера docker-compose run --rm web-app sh -c "python manage.py createsuperuser"
+Запустить билд docker-compose build  
+Запустить проект docker-compose up  
+Сделать миграции docker-compose run --rm web-app sh -c "python manage.py migrate"  
+Создать суперюзера docker-compose run --rm web-app sh -c "python manage.py createsuperuser"  
 
 
 <img width="1635" alt="Снимок экрана 2022-04-09 в 22 37 30" src="https://user-images.githubusercontent.com/15955132/162589172-da374af1-2585-4c5c-b92f-47708db398fa.png">
