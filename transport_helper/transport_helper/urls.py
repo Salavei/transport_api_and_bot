@@ -11,8 +11,8 @@ urlpatterns = [
 ]
 
 router = routers.DefaultRouter()
-router.register(r'api/v1/infotrans', TransportView),
-router.register(r'api/v1/infostation', StationView)
+router.register(r'api/v1/infotrans', TransportView, basename='infotrans'),
+router.register(r'api/v1/infostation', StationView, basename='infostation')
 
 urlpatterns += router.urls
 urlpatterns += staticfiles_urlpatterns()

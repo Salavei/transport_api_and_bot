@@ -34,13 +34,13 @@ class SQLestate:
 
     def count_station(self, external_id):
         with self.connection:
-            self.cursor.execute('SELECT * FROM bot_app_selectedstation WHERE profile_id = %s',(external_id,))
+            self.cursor.execute('SELECT * FROM bot_app_selectedstation WHERE profile_id = %s', (external_id,))
             return len(self.cursor.fetchall())
 
     def count_transp(self, external_id):
         with self.connection:
             self.cursor.execute('SELECT * FROM bot_app_selectedtransport WHERE profile_id = %s',
-                                         (external_id,))
+                                (external_id,))
             return len(self.cursor.fetchall())
 
     def add_stats(self, transport_type, transport_number, station, external_id):
@@ -71,22 +71,21 @@ class SQLestate:
 
     def dell_my_transport(self, external_id):
         with self.connection:
-
             self.cursor.execute('SELECT id FROM bot_app_selectedtransport WHERE profile_id = %s ORDER BY id',
                                 (external_id,))
             take_id = self.cursor.fetchone()[0]
             self.cursor.execute(
-            'SELECT transport_type, transport_number FROM bot_app_selectedtransport WHERE id = %s',
-            (take_id,))
+                'SELECT transport_type, transport_number FROM bot_app_selectedtransport WHERE id = %s',
+                (take_id,))
             result = self.cursor.fetchall()
             self.cursor.execute('DELETE FROM bot_app_selectedtransport WHERE profile_id = %s and id  = %s',
-                            (external_id, take_id,))
+                                (external_id, take_id,))
             return result
 
     def dell_my_station(self, external_id):
         with self.connection:
             self.cursor.execute('SELECT id FROM bot_app_selectedstation WHERE profile_id = %s ORDER BY id',
-                                    (external_id,))
+                                (external_id,))
 
             take_id = self.cursor.fetchone()[0]
             self.cursor.execute(

@@ -16,7 +16,7 @@ class TransportView(CreateModelMixin, GenericViewSet):
         serializer.is_valid(raise_exception=True)
         headers = self.get_success_headers(serializer.data)
         return Response(parser_all_station(self.request.data['transport_type'], self.request.data['transport_number']),
-                        status=status.HTTP_201_CREATED,
+                        status=status.HTTP_200_OK,
                         headers=headers)
 
 
@@ -29,5 +29,5 @@ class StationView(CreateModelMixin, GenericViewSet):
         serializer.is_valid(raise_exception=True)
         headers = self.get_success_headers(serializer.data)
         return Response(parser_station_n(self.request.data['transport_type'], self.request.data['transport_number'],
-                                         self.request.data['station']), status=status.HTTP_201_CREATED,
+                                         self.request.data['station']), status=status.HTTP_200_OK,
                         headers=headers)

@@ -1,4 +1,17 @@
 services:
+  bot-app:
+    build:
+      context: .
+    environment:
+      - TOKEN=${TOKEN}
+      - DB_HOST=database
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    command: >
+      sh -c "python bot_app/management/commands/main.py"
+    depends_on:
+      - web-app
   web-app:
     build:
       context: .
@@ -7,32 +20,22 @@ services:
     volumes:
       - ./transport_helper:/transport_helper
     environment:
-      - SECRET_KEY=YOUR_DATA
-      - DEBUG=YOUR_DATA(1 or 0)
-      - DJANGO_ALLOWED_HOSTS=YOUR_DATA(localhost 127.0.0.1 0.0.0.0)
-      - DB_HOST=YOUR_DATA
-      - DB_NAME=YOUR_DATA
-      - DB_USER=YOUR_DATA
-      - DB_PASS=YOUR_DATA
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - DB_HOST=database
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
     command: >
-      sh -c "gunicorn transport_helper.wsgi:application --bind 0.0.0.0:8000"
-      sh -c "python bot_app/management/commands/main.py"
-    depends_on:
-      - database
-  bot-app:
-    build:
-      context: .
-    environment:
-      - TOKEN=YOUR_DATA
-    command: >
-      sh -c "python bot_app/management/commands/main.py"
+      sh -c "python manage.py migrate
+      && gunicorn transport_helper.wsgi:application --bind 0.0.0.0:8000"
     depends_on:
       - database
   database:
     image: postgres:14.6-alpine
     environment:
-      - POSTGRES_DB=YOUR_DATA
-      - POSTGRES_USER=YOUR_DATA
-      - POSTGRES_PASSWORD=YOUR_DATA
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
     ports:
       - "5432:5432"

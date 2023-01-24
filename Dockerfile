@@ -11,5 +11,6 @@ EXPOSE  8000
 RUN pip install -r /temp/requirements.txt
 
 RUN adduser --disabled-password app-user
+
 USER app-user
 
