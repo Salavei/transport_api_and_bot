@@ -23,10 +23,21 @@ The user can have 2 saved transports and 2 stops.
 Telegram bot shows actual information about transport arrivals and all transport stops.  
 The information is parsed from third-party sources.   
 
+<p align="center">  
+<img width="500"  height="600" alt="bot_1" src="https://user-images.githubusercontent.com/15955132/214379154-b76dddb7-295f-4b82-95af-67a67a538681.png">
+<img width="500"  height="600"  alt="bot_2" src="https://user-images.githubusercontent.com/15955132/214379218-2e2ecff6-2f9a-4577-914a-d1a153e3abbe.png"</p>
+<p align="center">
+<img width="500" height="600" alt="bot_3" src="https://user-images.githubusercontent.com/15955132/214379244-4a8ceb98-e1da-4031-9ec9-284db66ef922.png">
+<img width="500" height="600"  alt="bot_4" src="https://user-images.githubusercontent.com/15955132/214379259-6293dec1-5a43-41a3-b3fc-af9550b0c66b.png">
+</p>
+
+
+
 ### Api
 There is an Api, through which you can get the same information about the transport:  
 `` https://your_host/api/v1/infotrans ``    
 `` https://your_host/api/v1/infostation ``    
+<p align="center"><img width="500" alt="api_1" src="https://user-images.githubusercontent.com/15955132/214378375-13d5d13e-6a2c-4554-b019-0b0483ef037d.png"><img width="500" alt="api_2" src="https://user-images.githubusercontent.com/15955132/214378439-2863b655-bbef-4f83-96bf-b56ba5928870.png"></p>
 
 ### Home Page
 Entertaining home page about ``pants for 40 UAH``.  
@@ -50,5 +61,4 @@ DB_PASS=YOUR_DB_PASS
 ⋅*Migration `docker-compose run --rm web-app sh -c "python manage.py migrate"`  
 ⋅*Create superuser `docker-compose run --rm web-app sh -c "python manage.py createsuperuser"`  
 
-## Appearance
 
